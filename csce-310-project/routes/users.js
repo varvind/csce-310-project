@@ -26,6 +26,21 @@ router.post('/create', function(req, res, next) {
   });
 });
 
+
+router.post('/login', (req, res) => {
+  const {username, password} = req.body
+  pool.query('SELECT * FROM users WHERE username = $1', [username], (error, result) => {
+    if(error) {
+      throw error
+    }
+    user = result.rows[0]
+    bcrypt.compare(password, user.password, (error, answer) => {
+      res.status(200).send( `Successfully Logged In User with ID: ${user.user_id}`)
+    })
+  })
+
+})
+
 router.get('/get/:id', function(req, res, next) {
   res.json(req.params.id)
 });
