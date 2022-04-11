@@ -1,5 +1,7 @@
 var express = require('express');
 var router = express.Router();
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
 
 /* GET users listing. */
 router.post('/create', function(req, res, next) {
@@ -9,14 +11,19 @@ router.post('/create', function(req, res, next) {
   password = req.body.password
   profile_bio = req.body.profile_bio
 
-  pool.query('INSERT INTO users (first_name, last_name, username, password, profile_bio) VALUES ($1, $2, $3, $4, $5)',
-   [first_name, last_name, username, password, profile_bio], (error, results) => {
-    if (error) {
+  bcrypt.hash(password, saltRounds, function(err, hash) {
+    if(err) {
       throw error
     }
-    res.status(201).send(`User added with ID: ${results.insertId}`)
-  })
 
+    pool.query('INSERT INTO users (first_name, last_name, username, password, profile_bio) VALUES ($1, $2, $3, $4, $5) RETURNING *',
+    [first_name, last_name, username, hash, profile_bio], (error, results) => {
+      if (error) {
+        throw error
+      }
+      res.status(201).send(`User added with ID: ${results.rows[0].user_id}`)
+    })
+  });
 });
 
 router.get('/get/:id', function(req, res, next) {
