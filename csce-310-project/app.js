@@ -12,7 +12,7 @@ var usersRouter = require('./routes/users');
 var app = express();
 
 const Pool = require('pg').Pool
-const pool = new Pool({
+global.pool = new Pool({
   user: 'arvind',
   host: 'localhost',
   database: 'maroonlink',
@@ -21,6 +21,10 @@ const pool = new Pool({
 })
 
 
+app.use("*", (req, res, next) => {
+  
+  next()
+})
 port = 4000
 
 // view engine setup
@@ -34,7 +38,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/user', usersRouter);
 
 // catch 404 and forward to error handler
 app.listen(port, () => {
