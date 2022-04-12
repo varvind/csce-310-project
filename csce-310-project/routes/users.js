@@ -100,4 +100,46 @@ router.delete('/delete', function(req, res, next) {
   }
 });
 
+router.post('/update/password', function(req, res, next) {
+  if(req.session.userId == null) {
+    res.status(308).send('Error user not logged in')
+  } else {
+    const {original_password, new_password, confirm_password} = req.body
+
+    pool.query("Select * from users where user_id = $1", [req.session.userId], (error, result) => {
+      if(error) {
+        throw error
+      }
+      user = result.rows[0]
+      bcrypt.compare(original_password, user.password, (error, match) => {
+        if(error) {
+          throw error
+        }
+
+        if(match) {
+          if(new_password == confirm_password) {
+            bcrypt.hash(new_password, saltRounds, (error, hash) => {
+              if(error) {
+                throw error
+              }
+              pool.query(`UPDATE users SET password = $1 WHERE user_id = $2`, [hash, req.session.userId], (error, result) => {
+                if(error) {
+                  throw error
+                }
+                res.status(201).send(`User password successfully updated`)
+              })
+            })
+          } else {
+            res.status(400).send("New Password and Confirmation don't match")
+          }
+        } else {
+          res.status(400).send("Original Password does not match record")
+        }
+      })
+    }) 
+    
+
+  }
+})
+
 module.exports = router;
