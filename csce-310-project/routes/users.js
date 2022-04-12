@@ -21,6 +21,7 @@ router.post('/create', function(req, res, next) {
       if (error) {
         throw error
       }
+      req.session.userId = results.rows[0].user_id
       res.status(201).send(`User added with ID: ${results.rows[0].user_id}`)
     })
   });
@@ -34,15 +35,64 @@ router.post('/login', (req, res) => {
       throw error
     }
     user = result.rows[0]
-    bcrypt.compare(password, user.password, (error, answer) => {
-      res.status(200).send( `Successfully Logged In User with ID: ${user.user_id}`)
-    })
+    if(user != null) {
+      bcrypt.compare(password, user.password, (error, match) => {
+        if(error) {
+          throw error
+        }
+        if (match) {
+          req.session.userId = user.user_id
+          res.status(200).send( `Successfully Logged In User with ID: ${user.user_id}`)
+          console.log(req.session)
+        } else {
+          res.status(400).send('invalid password')
+        }
+      })
+    } else {
+      res.status(400).send('invalid username, resource not found')
+    }
+    
   })
 
+})
+
+router.post('/update', (req, res) => {
+  if(req.session.userId == null) {
+    res.status(308).send(`Error user not logged in`)
+  } else {
+    const {first_name, last_name, username, profile_bio} = req.body
+    query = 'UPDATE users SET '
+    if(first_name != null && first_name != "") {
+      query += `first_name = \'${first_name}\', `
+    }
+    if(last_name != null && last_name != "") {
+      query += `last_name = \'${last_name}\', `
+    }
+    if(username != null && username != "") {
+      query += `username = \'${username}\', `
+    }
+    if(profile_bio != null && profile_bio != "") {
+      query += `profile_bio = \'${profile_bio}\', `
+    }
+    query = query.substring(0, query.length - 2)
+    query += ` where user_id = ${req.session.userId}`
+    console.log(query)
+    pool.query(query, (error, result) => {
+      if(error) {
+        throw error
+      }
+      res.status(201).send(`User successfully updated`)
+    })
+  }
+  
 })
 
 router.get('/get/:id', function(req, res, next) {
   res.json(req.params.id)
 });
+
+function getUser() {
+  
+}
 
 module.exports = router;

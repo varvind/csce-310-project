@@ -4,12 +4,23 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var bodyParser = require('body-parser')
-
+var express_session = require('express-session')
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
 var app = express();
+app.set('trust proxy', 1) // trust first proxy
+app.use(express_session({
+  secret: 'keyboard cat',
+}))
+
+global.loggedIn = null
+app.use("*", (req, res, next) => {
+  loggedIn = req.session.userId;
+  next()
+})
+
 
 const Pool = require('pg').Pool
 global.pool = new Pool({
@@ -18,12 +29,6 @@ global.pool = new Pool({
   database: 'maroonlink',
   password: 'arvind00',
   port: 5432,
-})
-
-
-app.use("*", (req, res, next) => {
-  
-  next()
 })
 port = 4000
 
