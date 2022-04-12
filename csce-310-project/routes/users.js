@@ -87,12 +87,17 @@ router.post('/update', (req, res) => {
   
 })
 
-router.get('/get/:id', function(req, res, next) {
-  res.json(req.params.id)
+router.delete('/delete', function(req, res, next) {
+  if(req.session.userId == null) {
+    res.status(308).send(`Error user not logged in`)
+  } else {
+    pool.query("Delete from users where user_id = $1", [req.session.userId], (error, result) => {
+      if(error) {
+        throw error
+      }
+      res.status(200).send('User successfully deleted')
+    })
+  }
 });
-
-function getUser() {
-  
-}
 
 module.exports = router;
