@@ -4,24 +4,33 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var bodyParser = require('body-parser')
-
+var express_session = require('express-session')
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var adminRouter = require('./routes/admin');
 
 var app = express();
+app.set('trust proxy', 1) // trust first proxy
+app.use(express_session({
+  secret: 'keyboard cat',
+}))
+
+global.loggedIn = null
+app.use("*", (req, res, next) => {
+  loggedIn = req.session.userId;
+  next()
+})
+
 
 const Pool = require('pg').Pool
-const pool = new Pool({
+global.pool = new Pool({
   user: 'arvind',
   host: 'localhost',
   database: 'maroonlink',
   password: 'arvind00',
   port: 5432,
 })
-
-
 port = 4000
 
 // view engine setup
@@ -35,7 +44,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/user', usersRouter);
 app.use('/admin', adminRouter);
 
 // catch 404 and forward to error handler
