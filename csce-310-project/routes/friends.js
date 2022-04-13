@@ -54,6 +54,20 @@ router.post('/update/status/:friend_id', (req, res, next) => {
     }
 })
 
+router.get('/get', (req, res, next) => {
+    if(req.session.userId == null) {
+        res.status(308).send(`Error user not logged in`)
+    } else {
+        pool.query("Select profile_bio, first_name, last_name, user_id FROM users WHERE user_id in (SELECT CASE WHEN @user_id_1 = $1 THEN user_id_2 WHEN @user_id_2 = $1 THEN user_id_1 end as final_user_id FROM friends)", [req.session.userId], (error, result) => {
+            if(error) {
+                throw error
+            }
+            friends = result.rows
+            res.status(201).send(friends)
+        })
+    }
+})
+
 
 
 module.exports = router;
