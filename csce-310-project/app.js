@@ -24,11 +24,18 @@ app.use("*", (req, res, next) => {
 
 const Pool = require('pg').Pool
 global.pool = new Pool({
+  /*
   user: 'arvind',
   host: 'localhost',
   database: 'maroonlink',
   password: 'arvind00',
   port: 5432,
+  */
+  user: 'postgres',
+  host: 'localhost',
+  database: 'cs310',
+  password: 'JK529749jk',
+  port: 5433,
 })
 port = 4000
 
