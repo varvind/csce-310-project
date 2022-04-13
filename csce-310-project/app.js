@@ -46,8 +46,12 @@ app.use('/', indexRouter);
 app.use('/user', usersRouter);
 
 // catch 404 and forward to error handler
-app.listen(port, () => {
-  console.log(`App running on port ${port}`)
+app.listen(port, function(error) {
+  if (error) {
+    console.log('Something went wrong', error)
+  } else {
+    console.log(`App running on port ${port}`)
+  }
 })
 
 module.exports = app;
