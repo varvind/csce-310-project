@@ -39,6 +39,21 @@ router.post("/add/:user_id", (req, res, next) => {
     }
 })
 
+router.post('/update/status/:friend_id', (req, res, next) => {
+    if(req.session.userId == null) {
+        res.status(308).send(`Error user not logged in`)
+    } else {
+        const friend_id = req.params.friend_id
+        const {status} = req.body
+        pool.query("UPDATE friends SET relationship = $3 where (user_id_1 = $1 AND user_id_2 = $2) OR (user_id_1 = $2 AND user_id_2 = $1)", [req.session.userId, friend_id, status], (error, result) => {
+            if(error) {
+                throw error
+            }
+            res.status(201).send("Successfully updated status of friendship")
+        })
+    }
+})
+
 
 
 module.exports = router;
