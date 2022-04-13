@@ -45,7 +45,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/user', usersRouter);
-app.user('/friends', friendsRouter)
+app.use('/friends', friendsRouter)
 
 // catch 404 and forward to error handler
 app.listen(port, () => {
