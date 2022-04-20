@@ -9,6 +9,7 @@ var express_session = require('express-session')
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var adminRouter = require('./routes/admin');
+var membersRouter = require('./routes/members');
 
 var app = express();
 app.set('trust proxy', 1) // trust first proxy
@@ -46,6 +47,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/user', usersRouter);
 app.use('/admin', adminRouter);
+app.use('/members', membersRouter);
 
 // catch 404 and forward to error handler
 app.listen(port, () => {
