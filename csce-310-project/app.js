@@ -31,10 +31,10 @@ global.pool = new Pool({
   password: 'arvind00',
   port: 5432,
   */
-  user: 'postgres',
+  user: 'me',
   host: 'localhost',
-  database: 'cs310',
-  password: 'JK529749jk',
+  database: 'maroonlink',
+  password: 'password',
   port: 5433,
 })
 port = 4000
