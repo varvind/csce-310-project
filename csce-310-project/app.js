@@ -5,15 +5,22 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var bodyParser = require('body-parser')
 var express_session = require('express-session')
+var cors = require('cors')
+
+
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var friendsRouter = require('./routes/friends')
 
 var app = express();
+
 app.set('trust proxy', 1) // trust first proxy
 app.use(express_session({
   secret: 'keyboard cat',
+  cookie: {
+    httpOnly:true
+  }
 }))
 
 global.loggedIn = null
@@ -21,6 +28,9 @@ app.use("*", (req, res, next) => {
   loggedIn = req.session.userId;
   next()
 })
+
+
+app.use(cors())
 
 
 const Pool = require('pg').Pool

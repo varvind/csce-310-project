@@ -13,13 +13,15 @@ router.post('/create', function(req, res, next) {
 
   bcrypt.hash(password, saltRounds, function(err, hash) {
     if(err) {
-      throw error
+      res.status(400).send("Could Not Hash Password")
+      next(err)
     }
 
     pool.query('INSERT INTO users (first_name, last_name, username, password, profile_bio) VALUES ($1, $2, $3, $4, $5) RETURNING *',
     [first_name, last_name, username, hash, profile_bio], (error, results) => {
       if (error) {
-        throw error
+        res.status(400).send("Error With Creating User, Please Check Users")
+        next(error)
       }
       req.session.userId = results.rows[0].user_id
       res.status(201).send(`User added with ID: ${results.rows[0].user_id}`)
@@ -42,7 +44,8 @@ router.post('/login', (req, res) => {
         }
         if (match) {
           req.session.userId = user.user_id
-          res.status(200).send( `Successfully Logged In User with ID: ${user.user_id}`)
+          req.session.save()
+          res.status(200).send(`${user.user_id}`)
           console.log(req.session)
         } else {
           res.status(400).send('invalid password')
@@ -141,5 +144,18 @@ router.post('/update/password', function(req, res, next) {
 
   }
 })
+
+router.get('/get/:id', (req, res, next) => {
+  pool.query('SELECT first_name, last_name, profile_bio FROM users where user_id = $1', [req.params.id], (error, result) => {
+    if(error) {
+      next(error)
+    }
+    user = result.rows[0]
+    res.status(200).send(user)
+  })
+})
+
+
+
 
 module.exports = router;
