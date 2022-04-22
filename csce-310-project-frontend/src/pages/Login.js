@@ -1,10 +1,14 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCookies } from 'react-cookie';
+import {React, updateState} from "react"
+
+
 
 
 const Login = () => {
-    const [inputs, setInputs] = useState({});
+    const [inputs, setInputs, updateState] = useState({});
+    const [force, forceUpdate] = useState(1)
     const [cookies, setCookie] = useCookies(['user']);
 
     const navigate = useNavigate();
@@ -31,13 +35,15 @@ const Login = () => {
             response.text().then((userId) => {
                 setCookie('userId', userId, { path: '/' })
             })
-            
-            
-            navigate('/')
-            
+            alert("Successfully Logged In")
+            window.location.href = '/';
             
         } else {
-            navigate('/login')
+            response.text().then((errorMsg) => {
+                alert(errorMsg)
+                navigate('/login')
+            })
+            
         }
     }
 

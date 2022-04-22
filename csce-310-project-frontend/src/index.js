@@ -8,6 +8,9 @@ import SignUp from './pages/SignUp'
 import Login from './pages/Login';
 import Profile from './pages/Profile'
 import Friends from './pages/Friends';
+import ChangeStatus from './pages/ChangeStatus'
+import Settings from './pages/user_settings/Settings'
+import Search from './pages/Search';
 
 export default function App() {
   return (
@@ -19,6 +22,9 @@ export default function App() {
           <Route path='/login' element = {<Login/>} />
           <Route path='/profile' element = {<Profile/>} />
           <Route path='/friends' element = {<Friends/>} />
+          <Route path='/settings' element = {<Settings/>} />
+          <Route path='/change/status/:friend_id' element = {<ChangeStatus/>} />
+          <Route path='/search/:query' element = {<Search/>}/>
         </Route>
       </Routes>
     </BrowserRouter>

@@ -1,18 +1,32 @@
 import {Outlet, Link} from "react-router-dom"
-import { useCookies } from 'react-cookie';
+import Cookies from 'js-cookie';
+import React, { useState } from 'react';
+
+function useForceUpdate(){
+    const [value, setValue] = useState(0); // integer state
+    return () => setValue(value => value + 1); // update the state to force render
+}
+
 const Layout = () => {
-
-    const [cookies, setCookie] = useCookies(['user']);
-
-    const logout = (e) => {
-
-        cookies.remove('userId');
-        window.location.href = '/';
-        return false;
+    const [inputs, setInputs] = useState({search:""});
+    const handleChange = (event) => {
+        const name = event.target.name;
+        const value = event.target.value;
+        setInputs(values => ({...values, [name]: value}))
+    }
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        window.location.href = `/search/items?query=${inputs.search}`
     }
 
+    const logout = () => {
+        console.log("hi")
+        Cookies.remove('userId')
+        window.location.href = '/';
+    }
 
-    const userId = cookies.userId
+    console.log(inputs)
+    const userId = Cookies.get('userId')
     return (
         <>
             <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -42,14 +56,21 @@ const Layout = () => {
                                 <Link class = "nav-link" to='/profile'>Profile</Link>
                             </li>
                             <li class="nav-item">
+                                <Link class = "nav-link" to='/settings'>Settings</Link>
+                            </li>
+                            <li class="nav-item">
                                 <Link class = "nav-link" to='/friends'>Friends</Link>
                             </li>
                             <li class="nav-item">
-                                <Link class = "nav-link" to='/logout'>Logout</Link>
+                                <Link class = "nav-link" to='/' onClick={logout}>Logout</Link>
                             </li>
                         </>
                     } 
                     </ul>
+                    <form class="form-inline my-2 my-lg-0" onSubmit={handleSubmit}>
+                        <input class="form-control mr-sm-2" type="search" placeholder="Find Friends" value = {inputs.search || ""} name = "search" aria-label="Search" onChange={handleChange}/>
+                        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Find</button>
+                    </form>
                 </div>
             </nav>
             <Outlet />

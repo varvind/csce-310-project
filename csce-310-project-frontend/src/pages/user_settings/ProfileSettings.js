@@ -1,9 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Cookies from 'js-cookie';
-
-
-const SignUp = () => {
+const ProfileSettings = () => {
     const [inputs, setInputs] = useState({});
     const navigate = useNavigate();
     const handleChange = (event) => {
@@ -11,37 +9,34 @@ const SignUp = () => {
         const value = event.target.value;
         setInputs(values => ({...values, [name]: value}))
     }
+    const user_id = Cookies.get('userId')
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        let response = await fetch('http://localhost:4000/user/create', {
+        let response = await fetch(`http://localhost:4000/user/update/${user_id}`, {
             method: 'POST',
             headers: {'Content-Type':'application/json'},
             body: JSON.stringify({
                  "first_name": inputs.first_name,
                  "last_name": inputs.last_name,
-                 "username": inputs.username,
-                 "password": inputs.password,
-                 "profile_bio": inputs.bio
+                 "profile_bio": inputs.bio,
+                 "username": inputs.username
             })
          });
-
         if(response.status === 201) {
-            response.text().then((userId) => {
-                alert("Successfully Created User")
-                Cookies.set('userId', userId)
-                navigate('/')
+            alert("Profile Updated")
+            navigate('/profile')
+        } else {
+            response.text().then((result) => {
+                alert(result)
+                navigate('/settings')
             })
             
-        } else {
-            alert("Unable to create user")
-            navigate('/signup')
         }
     }
-    
-    return(
-        <>
-        <center>
+    return (
+    <>
+        <h3>Profile Settings</h3>
         <form onSubmit={handleSubmit}>
             <label>First Name
             <input 
@@ -55,51 +50,41 @@ const SignUp = () => {
             </label>
             <br/>
             <label>Last Name
-                <input 
+            <input 
                 type="text" 
                 name="last_name"
-                class="form-control"
+                class="form-control" 
                 value={inputs.last_name || ""} 
                 onChange={handleChange}
-                />
+
+            />
             </label>
             <br/>
-            <label>Username
-                <input 
+            <label>Profile Bio
+            <input 
                 type="text" 
-                name="username" 
-                class="form-control"
-                value={inputs.username || ""} 
-                onChange={handleChange}
-                />
-            </label>
-            <br/>
-            <label>Password
-                <input 
-                type="password" 
-                name="password" 
-                class="form-control"
-                value={inputs.password || ""} 
-                onChange={handleChange}
-                />
-            </label>
-            <br/>
-            <label>Bio
-                <input 
-                type="text" 
-                name="bio" 
-                class="form-control"
+                name="bio"
+                class="form-control" 
                 value={inputs.bio || ""} 
                 onChange={handleChange}
-                />
+
+            />
+            </label>
+            <label>Username
+            <input 
+                type="text" 
+                name="username"
+                class="form-control" 
+                value={inputs.username|| ""} 
+                onChange={handleChange}
+
+            />
             </label>
             <br/>
             <input type="submit" class="btn btn-primary" />
         </form>
-        </center>
-        </>
+    </>
     )
 }
 
-
-export default SignUp
+export default ProfileSettings
