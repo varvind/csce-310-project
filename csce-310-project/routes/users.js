@@ -13,16 +13,17 @@ router.post('/create', function(req, res, next) {
 
   bcrypt.hash(password, saltRounds, function(err, hash) {
     if(err) {
-      throw error
+      res.status(400).send("Could Not Hash Password")
+      next(err)
     }
 
     pool.query('INSERT INTO users (first_name, last_name, username, password, profile_bio) VALUES ($1, $2, $3, $4, $5) RETURNING *',
     [first_name, last_name, username, hash, profile_bio], (error, results) => {
       if (error) {
-        throw error
+        res.status(400).send("Error With Creating User, Please Check Users")
+        next(error)
       }
-      req.session.userId = results.rows[0].user_id
-      res.status(201).send(`User added with ID: ${results.rows[0].user_id}`)
+      res.status(201).send(`${results.rows[0].user_id}`)
     })
   });
 });
@@ -38,12 +39,10 @@ router.post('/login', (req, res) => {
     if(user != null) {
       bcrypt.compare(password, user.password, (error, match) => {
         if(error) {
-          throw error
+          next(error)
         }
         if (match) {
-          req.session.userId = user.user_id
-          res.status(200).send( `Successfully Logged In User with ID: ${user.user_id}`)
-          console.log(req.session)
+          res.status(200).send(`${user.user_id}`)
         } else {
           res.status(400).send('invalid password')
         }
@@ -56,10 +55,7 @@ router.post('/login', (req, res) => {
 
 })
 
-router.post('/update', (req, res) => {
-  if(req.session.userId == null) {
-    res.status(308).send(`Error user not logged in`)
-  } else {
+router.post('/update/:user_id', (req, res) => {
     const {first_name, last_name, username, profile_bio} = req.body
     query = 'UPDATE users SET '
     if(first_name != null && first_name != "") {
@@ -75,38 +71,31 @@ router.post('/update', (req, res) => {
       query += `profile_bio = \'${profile_bio}\', `
     }
     query = query.substring(0, query.length - 2)
-    query += ` where user_id = ${req.session.userId}`
+    query += ` where user_id = ${req.params.user_id}`
     console.log(query)
     pool.query(query, (error, result) => {
       if(error) {
-        throw error
+        next(error)
       }
       res.status(201).send(`User successfully updated`)
     })
-  }
   
 })
 
-router.delete('/delete', function(req, res, next) {
-  if(req.session.userId == null) {
-    res.status(308).send(`Error user not logged in`)
-  } else {
-    pool.query("Delete from users where user_id = $1", [req.session.userId], (error, result) => {
-      if(error) {
-        throw error
-      }
-      res.status(200).send('User successfully deleted')
-    })
-  }
+router.delete('/delete/:user_id', function(req, res, next) {
+
+  pool.query("Delete from users where user_id = $1", [req.params.user_id], (error, result) => {
+    if(error) {
+      next(error)
+    }
+    res.status(200).send('User successfully deleted')
+  })
 });
 
-router.post('/update/password', function(req, res, next) {
-  if(req.session.userId == null) {
-    res.status(308).send('Error user not logged in')
-  } else {
+router.post('/update/password/:user_id', function(req, res, next) {
     const {original_password, new_password, confirm_password} = req.body
 
-    pool.query("Select * from users where user_id = $1", [req.session.userId], (error, result) => {
+    pool.query("Select * from users where user_id = $1", [req.params.user_id], (error, result) => {
       if(error) {
         throw error
       }
@@ -115,14 +104,13 @@ router.post('/update/password', function(req, res, next) {
         if(error) {
           throw error
         }
-
         if(match) {
           if(new_password == confirm_password) {
             bcrypt.hash(new_password, saltRounds, (error, hash) => {
               if(error) {
                 throw error
               }
-              pool.query(`UPDATE users SET password = $1 WHERE user_id = $2`, [hash, req.session.userId], (error, result) => {
+              pool.query(`UPDATE users SET password = $1 WHERE user_id = $2`, [hash, req.params.user_id], (error, result) => {
                 if(error) {
                   throw error
                 }
@@ -130,16 +118,62 @@ router.post('/update/password', function(req, res, next) {
               })
             })
           } else {
-            res.status(400).send("New Password and Confirmation don't match")
+            res.status(200).send("New Password and Confirmation don't match")
           }
         } else {
-          res.status(400).send("Original Password does not match record")
+          res.status(200).send("Original Password does not match record")
         }
       })
     }) 
-    
-
-  }
 })
+
+router.get('/get/:id', (req, res, next) => {
+  pool.query('SELECT first_name, last_name, profile_bio, username FROM users where user_id = $1', [req.params.id], (error, result) => {
+    if(error) {
+      next(error)
+    }
+    user = result.rows[0]
+    res.status(200).send(user)
+  })
+})
+
+router.get('/search', (req, res, next) => {
+  words = req.query.name.split()
+  if(req.query.name === '') {
+      pool.query("Select first_name, last_name, profile_bio, user_id, username from users", (error, result) => {
+          if(error) {
+              next(error)
+          }
+          users = result.rows
+          res.status(200).send(users)
+      })
+  }
+  else if(words.length > 2) {
+      res.status(200).send([])
+  } else if (words.length == 1) {
+    first_name = words[0]
+    pool.query("Select first_name, last_name, profile_bio, user_id, username from users where first_name = $1", [first_name], (error, result) => {
+      if(error) {
+          next(error)
+      }
+      users = result.rows
+      res.status(200).send(users)
+  })
+  } else {
+      first_name = words[0]
+      last_name = words[1]
+      pool.query("Select first_name, last_name, profile_bio, user_id, username from users where first_name = $1 AND last_name = $2", [first_name, last_name], (error, result) => {
+          if(error) {
+              next(error)
+          }
+          users = result.rows
+          res.status(200).send(users)
+      })
+  }
+  
+})
+
+
+
 
 module.exports = router;

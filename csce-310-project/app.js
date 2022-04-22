@@ -4,24 +4,22 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var bodyParser = require('body-parser')
-var express_session = require('express-session')
+var cors = require('cors')
+
+
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var friendsRouter = require('./routes/friends')
 var adminRouter = require('./routes/admin');
 var membersRouter = require('./routes/members');
 
 var app = express();
-app.set('trust proxy', 1) // trust first proxy
-app.use(express_session({
-  secret: 'keyboard cat',
-}))
 
-global.loggedIn = null
-app.use("*", (req, res, next) => {
-  loggedIn = req.session.userId;
-  next()
-})
+app.set('trust proxy', 1) // trust first proxy
+
+
+app.use(cors())
 
 
 const Pool = require('pg').Pool
@@ -46,6 +44,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/user', usersRouter);
+app.use('/friends', friendsRouter)
 app.use('/admin', adminRouter);
 app.use('/members', membersRouter);
 
