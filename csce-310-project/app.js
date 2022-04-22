@@ -11,6 +11,8 @@ var cors = require('cors')
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var friendsRouter = require('./routes/friends')
+var adminRouter = require('./routes/admin');
+var membersRouter = require('./routes/members');
 
 var app = express();
 
@@ -22,10 +24,10 @@ app.use(cors())
 
 const Pool = require('pg').Pool
 global.pool = new Pool({
-  user: 'arvind',
+  user: 'jason',
   host: 'localhost',
   database: 'maroonlink',
-  password: 'arvind00',
+  password: 'tomatobad',
   port: 5432,
 })
 port = 4000
@@ -43,6 +45,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/user', usersRouter);
 app.use('/friends', friendsRouter)
+app.use('/admin', adminRouter);
+app.use('/members', membersRouter);
 
 // catch 404 and forward to error handler
 app.listen(port, () => {
