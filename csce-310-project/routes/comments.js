@@ -26,3 +26,18 @@ router.post("/create/comment/:userId", (req, res, next) => {
 /*
 *   Functionality: Pull all comments from a user.
 */
+router.get("/mycomments/:userId", (req, res) => {
+    // Check if anyone is logged in
+    if (req.params.userId = null) {
+        res.status(308).send(`Error user not logged in`)
+    } else {
+        // Pull comments from database where userid of a row = the userid from the url
+        pool.query(`select comments from Event_Comments where user_id = ${req.params.userId}`)
+        if (error) {
+            throw error
+        }
+
+        request = results.rows[0]
+        res.status(201).send(`Successfully pulled all comments from ${request.user_id}`)
+    }
+})
