@@ -29,7 +29,7 @@ router.post('/create', function(req, res, next) {
 });
 
 
-router.post('/login', (req, res) => {
+router.post('/login', (req, res, next) => {
   const {username, password} = req.body
   pool.query('SELECT * FROM users WHERE username = $1', [username], (error, result) => {
     if(error) {

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Cookies from 'js-cookie';
+import React, { Component }  from 'react';
 
 const PasswordSettings = () => {
     const [inputs, setInputs] = useState({});

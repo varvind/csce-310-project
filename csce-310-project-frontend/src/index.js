@@ -11,6 +11,7 @@ import Friends from './pages/Friends';
 import ChangeStatus from './pages/ChangeStatus'
 import Settings from './pages/user_settings/Settings'
 import Search from './pages/Search';
+import UserProfile from './pages/UserProfile'
 
 export default function App() {
   return (
@@ -25,6 +26,7 @@ export default function App() {
           <Route path='/settings' element = {<Settings/>} />
           <Route path='/change/status/:friend_id' element = {<ChangeStatus/>} />
           <Route path='/search/:query' element = {<Search/>}/>
+          <Route path ='/profile/:user_id' element = {<UserProfile/>} />
         </Route>
       </Routes>
     </BrowserRouter>

@@ -1,3 +1,5 @@
+import React, { Component }  from 'react';
+
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Cookies from 'js-cookie';

@@ -5,6 +5,7 @@ import ProfileSettings from './ProfileSettings'
 import PasswordSettings from './PasswordSettings'
 import DeleteProfile from "./DeleteProfile";
 
+
 const Settings = () => {
 
     let [choice, setState] = useState("Profile")

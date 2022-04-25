@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Cookies from 'js-cookie';
+import React, { Component }  from 'react';
+
 
 
 const SignUp = () => {
@@ -30,7 +32,7 @@ const SignUp = () => {
             response.text().then((userId) => {
                 alert("Successfully Created User")
                 Cookies.set('userId', userId)
-                navigate('/')
+                window.location.href = '/'
             })
             
         } else {
