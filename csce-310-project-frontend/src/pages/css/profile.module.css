@@ -1,0 +1,16 @@
+.backsplash {
+    height: 300px;
+    background-image: linear-gradient(to top right, #6d3d3d, rgb(100, 20, 20));
+}
+
+.name {
+    margin-top: -15%;
+    font-size: 70px;
+    color:white
+}
+
+.profile_bio {
+    font-size: 20px;
+    color:beige
+    
+}
