@@ -6,7 +6,7 @@ var router = express.Router();
  *   Functionality: Creating a new post and storing it in the database
  */
 router.post("/create/:userId", (req, res, next) => {
-    // Check if anyone is logged in
+    // Check if anyone is logged in. You should not be able to create a post from a null user.
     if (req.params.userId = null) {
         res.status(308).send(`Error user not logged in`)
     } else {
@@ -27,7 +27,7 @@ router.post("/create/:userId", (req, res, next) => {
  *   Functionality: Pull all comments from a user.
  */
 router.get("/mycomments/:userId", (req, res) => {
-    // Check if anyone is logged in
+    // Check if anyone is logged in.
     if (req.params.userId = null) {
         res.status(308).send(`Error user not logged in`)
     } else {
@@ -52,3 +52,7 @@ router.post("/update/:userId", (req, res) => {
     request = results.row[0]
     res.status(201).send(`Successfully updated the comment ${old_comment} to ${request.comments}`)
 })
+
+/*
+ *  d
+ */
