@@ -1,21 +1,19 @@
 import {useParams} from "react-router-dom";
-import React, { useState } from 'react';
+import React, {useState, useEffect} from 'react';
 import Cookies from 'js-cookie';
 import { useNavigate } from "react-router-dom";
 
-
+// Developed by Arvind V.
 const ChangeStatus = () => {
     let [name, setName] = useState("")
     let [relationship, setRelationship] = useState("")
     let [new_relationship, setNewRelationship] = useState("")
     const navigate = useNavigate();
-
-
     let user_id = Cookies.get('userId')
-
     let { friend_id } = useParams();
-    console.log(friend_id)
 
+    // Get Current User Relationship with This Person to determine
+    // whether or not to render add friend button
     const getRelationship = () => {
         fetch(`http://localhost:4000/friends/get/status/${user_id}/${friend_id}`)
         .then((response) => response.json())
@@ -26,6 +24,7 @@ const ChangeStatus = () => {
         })
     }
 
+    // Get friends name
     const getName = () => {
         fetch(`http://localhost:4000/user/get/${friend_id}`)
         .then((response) => response.json())
@@ -37,13 +36,13 @@ const ChangeStatus = () => {
         })
     }
     
-
+    // form change handler
     const handleChange = (event) => {
-        const name = event.target.name;
         const value = event.target.value;
         setNewRelationship(value)
     }
 
+    // for submit handler
     const handleSubmit = async (event) => {
         event.preventDefault();
         let response = await fetch(`http://localhost:4000/friends/update/status/${user_id}/${friend_id}`, {
@@ -61,7 +60,12 @@ const ChangeStatus = () => {
         }
     }
 
-    getName()
+    // Make sure state change runs only once
+    useEffect(() => {
+        getName()
+    },[])
+
+    // JSX Element
     return (
         <>
             <a href = '/friends'> Back to Friends Page</a>
@@ -84,6 +88,5 @@ const ChangeStatus = () => {
         </>
     )
 }
-
 
 export default ChangeStatus
