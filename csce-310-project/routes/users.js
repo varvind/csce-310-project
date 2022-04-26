@@ -1,9 +1,11 @@
+// File Developed by Arvind V.
+
 var express = require('express');
 var router = express.Router();
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
-/* GET users listing. */
+// Create User
 router.post('/create', function(req, res, next) {
   first_name = req.body.first_name
   last_name = req.body.last_name
@@ -28,7 +30,7 @@ router.post('/create', function(req, res, next) {
   });
 });
 
-
+// Login user
 router.post('/login', (req, res, next) => {
   const {username, password} = req.body
   pool.query('SELECT * FROM users WHERE username = $1', [username], (error, result) => {
@@ -55,6 +57,7 @@ router.post('/login', (req, res, next) => {
 
 })
 
+// Update User
 router.post('/update/:user_id', (req, res) => {
     const {first_name, last_name, username, profile_bio} = req.body
     query = 'UPDATE users SET '
@@ -82,6 +85,7 @@ router.post('/update/:user_id', (req, res) => {
   
 })
 
+// Delete User
 router.delete('/delete/:user_id', function(req, res, next) {
 
   pool.query("Delete from users where user_id = $1", [req.params.user_id], (error, result) => {
@@ -92,6 +96,7 @@ router.delete('/delete/:user_id', function(req, res, next) {
   })
 });
 
+// Update User Password
 router.post('/update/password/:user_id', function(req, res, next) {
     const {original_password, new_password, confirm_password} = req.body
 
@@ -127,6 +132,7 @@ router.post('/update/password/:user_id', function(req, res, next) {
     }) 
 })
 
+// Get User
 router.get('/get/:id', (req, res, next) => {
   pool.query('SELECT first_name, last_name, profile_bio, username FROM users where user_id = $1', [req.params.id], (error, result) => {
     if(error) {
@@ -137,6 +143,7 @@ router.get('/get/:id', (req, res, next) => {
   })
 })
 
+// Search for users given a query
 router.get('/search', (req, res, next) => {
   words = req.query.name.split()
   if(req.query.name === '') {
@@ -170,7 +177,6 @@ router.get('/search', (req, res, next) => {
           res.status(200).send(users)
       })
   }
-  
 })
 
 

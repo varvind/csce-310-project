@@ -1,6 +1,9 @@
+// File Developed by Arvind V.
+
 var express = require('express');
 var router = express.Router();
 
+// Create Friend Request
 router.post("/create/request/:user_id/:requested_user_id", (req, res, next) => {
     const requested_user_id = req.params.requested_user_id
     console.log(requested_user_id)
@@ -20,6 +23,7 @@ router.post("/create/request/:user_id/:requested_user_id", (req, res, next) => {
     }) 
 })
 
+// Add Friend and Delete Friend Request
 router.post("/add", (req, res, next) => {
     const requested_user_id = req.body.requested_id
     const user_id = req.body.user_id
@@ -40,6 +44,7 @@ router.post("/add", (req, res, next) => {
     })
 })
 
+// Update Friend Status
 router.post('/update/status/:user_id/:friend_id', (req, res, next) => {
     const friend_id = req.params.friend_id
     const user_id = req.params.user_id
@@ -52,6 +57,7 @@ router.post('/update/status/:user_id/:friend_id', (req, res, next) => {
     })
 })
 
+// Get Friend Information
 router.get('/get/:id', (req, res, next) => {
 
     pool.query("Select profile_bio, first_name, last_name, user_id FROM users WHERE user_id in (SELECT CASE WHEN @user_id_1 = $1 THEN user_id_2 WHEN @user_id_2 = $1 THEN user_id_1 end as final_user_id FROM friends)", [req.params.id], (error, result) => {
@@ -63,6 +69,7 @@ router.get('/get/:id', (req, res, next) => {
     })
 })
 
+// Get Friend Relationship status
 router.get('/get/status/:user_id/:friend_id', (req, res, next) => {
     pool.query("Select relationship from friends where (user_id_1 = $1 AND user_id_2 = $2) OR (user_id_1=$2 AND user_id_1 = $1);", [req.params.user_id, req.params.friend_id], (error, result) => {
         if(error) {
@@ -76,6 +83,7 @@ router.get('/get/status/:user_id/:friend_id', (req, res, next) => {
     })
 })
 
+// Get Specific Friend Request
 router.get('/get/request/:user_id/:friend_id', (req, res, next) => {
     pool.query("Select * from friend_request where (user_initiator_id = $1 AND user_id = $1);", [req.params.user_id, req.params.friend_id], (error, result) => {
         if(error) {
@@ -89,6 +97,7 @@ router.get('/get/request/:user_id/:friend_id', (req, res, next) => {
     })
 })
 
+// Get All Friend Requests
 router.get('/get/requests/:user_id', (req, res, next) => {
     pool.query("SELECT * FROM users WHERE user_id IN (SELECT user_initiator_id FROM friend_request WHERE (user_id = $1))", [req.params.user_id], (error, result) => {
         if(error) {
@@ -102,6 +111,7 @@ router.get('/get/requests/:user_id', (req, res, next) => {
     })
 })
 
+// Delete Friend
 router.delete('/delete/:user_id/:friend_id', (req, res, next) => {
     user_id = req.params.user_id
     friend_id = req.params.friend_id
