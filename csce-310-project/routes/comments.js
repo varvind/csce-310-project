@@ -39,7 +39,7 @@ router.get("/mycomments/:userId", (req, res) => {
         })
         
         // request = results.rows[0]
-        res.status(201).send(`Successfully pulled all comments from ${req.params.userId}`)
+        res.status(200).send(`Successfully pulled all comments from ${req.params.userId}`)
     }
 })
 
@@ -55,7 +55,7 @@ router.post("/update/:userId", (req, res) => {
     })
     
     request = results.row[0]
-    res.status(201).send(`Successfully updated the comment ${old_comment} to ${request.comments}`)
+    res.status(200).send(`Successfully updated the comment ${old_comment} to ${request.comments}`)
 })
 
 /*
@@ -68,6 +68,8 @@ router.post("/delete/:userId", (req, res) => {
             throw error
         }
     })
+
+    // send deleted comment to console for testing
     request = results.row[0]
-    res.status(201).send(`Successfully deleted the comment ${request.comments}`)
+    res.status(200).send(`Successfully deleted the comment ${request.comments}`)
 })
