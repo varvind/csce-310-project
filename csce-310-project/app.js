@@ -10,9 +10,10 @@ var cors = require('cors')
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-var friendsRouter = require('./routes/friends')
+var friendsRouter = require('./routes/friends');
 var adminRouter = require('./routes/admin');
 var membersRouter = require('./routes/members');
+var commentsRouter = require('./routes/comments');
 
 var app = express();
 
@@ -55,6 +56,7 @@ app.use('/user', usersRouter);
 app.use('/friends', friendsRouter)
 app.use('/admin', adminRouter);
 app.use('/members', membersRouter);
+app.use('/comments', commentsRouter)
 
 // catch 404 and forward to error handler
 app.listen(port, function(error) {
