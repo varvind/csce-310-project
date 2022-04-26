@@ -1,9 +1,8 @@
-import { useCookies } from 'react-cookie';
 import React from 'react';
 import styles from './css/profile.module.css'
 import Cookies from 'js-cookie';
 
-
+// Developed by Arvind V
 class Profile extends React.Component{
 
     constructor() {
@@ -21,6 +20,7 @@ class Profile extends React.Component{
         this.getUser()
     }
 
+    // Get User Elements for Profile
     getUser = () => {
         let user_id = Cookies.get('userId')
         fetch(`http://localhost:4000/user/get/${user_id}`)
@@ -38,7 +38,7 @@ class Profile extends React.Component{
         })
     }
 
-
+    // JSX Element
     render() {
         console.log(this.state)
         return(

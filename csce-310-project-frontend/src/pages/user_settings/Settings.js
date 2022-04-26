@@ -1,19 +1,20 @@
-import { render } from "react-dom"
 import styles from "../css/user_settings.module.css"
 import React, { useState } from 'react';
 import ProfileSettings from './ProfileSettings'
 import PasswordSettings from './PasswordSettings'
 import DeleteProfile from "./DeleteProfile";
 
+// Developed by Arvind V.
 const Settings = () => {
-
     let [choice, setState] = useState("Profile")
 
+    // Change Render Based on Button Press
     const changeRender = (event) => {
         choice = event.target.innerText
         setState(choice)  
     }
 
+    // JSX Element
     return (
         <>
             <center>
@@ -28,8 +29,8 @@ const Settings = () => {
                         </div>
                         <div class = "col-sm-3">
                             { choice === "Profile" && <ProfileSettings/>}
-                            { choice === "Password Reset" &&<PasswordSettings/>}
-                            { choice === "Delete Profile" &&<DeleteProfile/>}
+                            { choice === "Password Reset" && <PasswordSettings/>}
+                            { choice === "Delete Profile" && <DeleteProfile/>}
                         </div>
                         
                     </div>
