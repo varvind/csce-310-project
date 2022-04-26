@@ -12,7 +12,7 @@ router.post("/create/:userId", (req, res, next) => {
     } else {
         // Insert into database
         const {event_id, user_comment} = req.body
-        pool.query("Insert INTO event_comments (user_id, event_id, comment) VALUES ($1, $2, $3) RETURNING *", [req.params.userId, event_id, user_comment], () => {
+        pool.query("INSERT INTO event_comments (user_id, event_id, comment) VALUES ($1, $2, $3) RETURNING *", [req.params.userId, event_id, user_comment], () => {
             if (error) {
                 throw error
             }
@@ -32,11 +32,12 @@ router.get("/mycomments/:userId", (req, res) => {
         res.status(308).send(`Error user not logged in`)
     } else {
         // Pull comments from database where userid of a row = the userid from the url
-        pool.query("select comments from Event_Comments where user_id = " + req.params.userId)
-        if (error) {
-            throw error
-        }
-
+        pool.query("SELECT comments FROM Event_Comments WHERE user_id = " + req.params.userId, () => {
+            if (error) {
+                throw error
+            }
+        })
+        
         // request = results.rows[0]
         res.status(201).send(`Successfully pulled all comments from ${req.params.userId}`)
     }
@@ -47,12 +48,26 @@ router.get("/mycomments/:userId", (req, res) => {
  */
 router.post("/update/:userId", (req, res) => {
     const {old_comment, new_comment} = req.body
-    pool.query("Insert INTO Event_Comments " + new_comment + " where user_id = " + req.params.userId + " and comments = " + old_comment)
+    pool.query("INSERT INTO Event_Comments " + new_comment + " WHERE user_id = " + req.params.userId + " AND comments = " + old_comment, () => {
+        if (error) {
+            throw error
+        }
+    })
     
     request = results.row[0]
     res.status(201).send(`Successfully updated the comment ${old_comment} to ${request.comments}`)
 })
 
 /*
- *  d
+ *  Functionality: Allow the deletion of comments
  */
+router.post("/delete/:userId", (req, res) => {
+    const comment_to_delete = req.body
+    pool.query("DELETE FROM Event_Comments WHERE user_id = " + req.params.userId + " AND comments = " + comment_to_delete, () => {
+        if (error) {
+            throw error
+        }
+    })
+    request = results.row[0]
+    res.status(201).send(`Successfully deleted the comment ${request.comments}`)
+})
