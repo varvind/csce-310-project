@@ -48,6 +48,7 @@ router.get("/mycomments/:userId", (req, res) => {
  */
 router.post("/update/:userId", (req, res) => {
     const {old_comment, new_comment} = req.body
+    query = "INSERT INTO Event_Comments (comments) VALUES "
     pool.query("INSERT INTO Event_Comments " + new_comment + " WHERE user_id = " + req.params.userId + " AND comments = " + old_comment, () => {
         if (error) {
             throw error
