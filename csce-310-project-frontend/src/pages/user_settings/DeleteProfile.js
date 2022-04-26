@@ -1,13 +1,13 @@
-import { useState } from "react";
+import React from 'react';
 import { useNavigate } from "react-router-dom";
 import Cookies from 'js-cookie';
 
-
+// Developed By Arvind V.
 const DeleteProfile = () => {
     const navigate = useNavigate();
-    const [force, forceUpdate] = useState(1)
     const user_id = Cookies.get('userId')
 
+    // Submit Event Handler
     const handleSubmit = async (event) => {
         event.preventDefault();
         let response = await fetch(`http://localhost:4000/user/delete/${user_id}`, {
@@ -17,21 +17,22 @@ const DeleteProfile = () => {
 
         if(response.status === 200) {
             Cookies.remove('userId')
-            forceUpdate(1)
             alert("Profile Deleted")
-            navigate('/')
+            window.location.href='/'
         } else {
             alert("Error when attempting to delete profile")
             navigate('/settings')
         }
     }
+
+    // JSX Element
     return (
-    <>
-        <h3>Delete Profile?</h3>
-        <form onSubmit={handleSubmit}>
-            <input type="submit" class="btn btn-primary" value = "Delete Profile"/>
-        </form>
-    </>
+        <>
+            <h3>Delete Profile?</h3>
+            <form onSubmit={handleSubmit}>
+                <input type="submit" class="btn btn-primary" value = "Delete Profile"/>
+            </form>
+        </>
     )
 }
 

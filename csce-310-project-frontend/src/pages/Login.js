@@ -1,25 +1,21 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useCookies } from 'react-cookie';
-import {React, updateState} from "react"
+import Cookies from 'js-cookie';
+import React from "react"
 
-
-
-
+// Developed by Arvind V.
 const Login = () => {
-    const [inputs, setInputs, updateState] = useState({});
-    const [force, forceUpdate] = useState(1)
-    const [cookies, setCookie] = useCookies(['user']);
-
+    const [inputs, setInputs] = useState({});
     const navigate = useNavigate();
+
+    // Form Change Handler
     const handleChange = (event) => {
         const name = event.target.name;
         const value = event.target.value;
         setInputs(values => ({...values, [name]: value}))
     }
 
-    
-
+    // Form Submite Handler
     const handleSubmit = async (event) => {
         event.preventDefault();
         let response = await fetch('http://localhost:4000/user/login', {
@@ -33,22 +29,18 @@ const Login = () => {
         
         if(response.status === 200) {
             response.text().then((userId) => {
-                setCookie('userId', userId, { path: '/' })
+                Cookies.set('userId', userId)
             })
-            alert("Successfully Logged In")
-            window.location.href = '/';
-            
+            window.location.href = '/';   
         } else {
             response.text().then((errorMsg) => {
                 alert(errorMsg)
                 navigate('/login')
             })
-            
         }
     }
 
-    
-
+    // JSX Element
     return(
         <>
         <center>
