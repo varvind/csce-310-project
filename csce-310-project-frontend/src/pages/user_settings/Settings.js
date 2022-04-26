@@ -1,4 +1,3 @@
-import { render } from "react-dom"
 import styles from "../css/user_settings.module.css"
 import React, { useState } from 'react';
 import ProfileSettings from './ProfileSettings'

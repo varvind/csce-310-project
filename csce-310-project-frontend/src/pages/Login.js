@@ -1,14 +1,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useCookies } from 'react-cookie';
+import Cookies from 'js-cookie';
 import React from "react"
-
-
-
 
 const Login = () => {
     const [inputs, setInputs] = useState({});
-    const [cookies, setCookie] = useCookies(['user']);
 
     const navigate = useNavigate();
     const handleChange = (event) => {
@@ -17,7 +13,6 @@ const Login = () => {
         setInputs(values => ({...values, [name]: value}))
     }
 
-    
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -32,7 +27,7 @@ const Login = () => {
         
         if(response.status === 200) {
             response.text().then((userId) => {
-                setCookie('userId', userId, { path: '/' })
+                Cookies.set('userId', userId)
             })
             window.location.href = '/';
             
@@ -44,8 +39,6 @@ const Login = () => {
             
         }
     }
-
-    
 
     return(
         <>

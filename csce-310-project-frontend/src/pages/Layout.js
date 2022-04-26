@@ -2,11 +2,6 @@ import {Outlet, Link} from "react-router-dom"
 import Cookies from 'js-cookie';
 import React, { useState } from 'react';
 
-function useForceUpdate(){
-    const [value, setValue] = useState(0); // integer state
-    return () => setValue(value => value + 1); // update the state to force render
-}
-
 const Layout = () => {
     const [inputs, setInputs] = useState({search:""});
     const handleChange = (event) => {
@@ -25,7 +20,6 @@ const Layout = () => {
         window.location.href = '/';
     }
 
-    console.log(inputs)
     const userId = Cookies.get('userId')
     return (
         <>

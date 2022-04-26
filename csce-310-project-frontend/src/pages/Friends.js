@@ -1,7 +1,4 @@
-import { useCookies } from 'react-cookie';
-import React from 'react'
-import {useState, useEffect, Component} from 'react';
-import { useNavigate } from "react-router-dom";
+import React, {useState, useEffect,} from 'react';
 import Cookies from 'js-cookie';
 import axios from 'axios'
 

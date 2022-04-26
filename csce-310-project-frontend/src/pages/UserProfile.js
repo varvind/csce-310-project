@@ -11,11 +11,9 @@ const UserProfile = () => {
         username: ""
     })
     const [showButton, setState] = useState(false)
-
-
     const loggedInUserId = Cookies.get('userId')
     const { user_id } = useParams();
-    console.log(user_id)
+
     const getUser = () => {
         fetch(`http://localhost:4000/user/get/${user_id}`)
         .then((response) => response.json())
@@ -48,9 +46,6 @@ const UserProfile = () => {
         } 
     }
 
-    
-
-
     const handleSubmit = async () => {
         if(!loggedInUserId) {
             alert('Must Be Signed in To Add Friends')
@@ -60,7 +55,7 @@ const UserProfile = () => {
                 headers: {'Content-Type':'application/json'},
             }).then((response) => {
                 console.log(response)
-                if(response.status == 201) {
+                if(response.status === 201) {
                     alert('Friend Request Added')
                     window.location.href = '/friends';
                 } else {
@@ -75,6 +70,7 @@ const UserProfile = () => {
         getUser()
         verifyIfFriendExists()
     },[])
+
     return(
         <>
         <div className = {styles.backsplash}> 

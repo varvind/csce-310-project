@@ -30,6 +30,7 @@ const Search = () => {
             console.error(error)
         })
     }
+    
     useEffect(() => {
         getUsers()
     },[])

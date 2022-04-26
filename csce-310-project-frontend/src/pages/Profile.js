@@ -1,4 +1,3 @@
-import { useCookies } from 'react-cookie';
 import React from 'react';
 import styles from './css/profile.module.css'
 import Cookies from 'js-cookie';

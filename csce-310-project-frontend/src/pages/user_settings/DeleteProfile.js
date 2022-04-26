@@ -1,13 +1,10 @@
-import React, { Component }  from 'react';
-
-import { useState } from "react";
+import React from 'react';
 import { useNavigate } from "react-router-dom";
 import Cookies from 'js-cookie';
 
 
 const DeleteProfile = () => {
     const navigate = useNavigate();
-    const [force, forceUpdate] = useState(1)
     const user_id = Cookies.get('userId')
 
     const handleSubmit = async (event) => {
@@ -19,9 +16,8 @@ const DeleteProfile = () => {
 
         if(response.status === 200) {
             Cookies.remove('userId')
-            forceUpdate(1)
             alert("Profile Deleted")
-            navigate('/')
+            window.location.href='/'
         } else {
             alert("Error when attempting to delete profile")
             navigate('/settings')
