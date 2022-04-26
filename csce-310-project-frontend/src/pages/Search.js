@@ -2,17 +2,16 @@ import {useLocation} from "react-router-dom";
 import React, { useEffect, useState } from 'react';
 import Cookies from 'js-cookie';
 
-
+// Developed by Arvind V.
 const Search = () => {
     const search = useLocation().search;
     const search_query = new URLSearchParams(search).get("query")
     const user_id = Cookies.get('userId')
-    console.log(search_query)
-
     const [searchResults, setResults] = useState({
         users: []
     })
 
+    // Search Users
     const getUsers = () => {
         fetch(`http://localhost:4000/user/search?name=${search_query}`)
         .then((response) => response.json())
@@ -30,14 +29,15 @@ const Search = () => {
             console.error(error)
         })
     }
-    
+
+    // Make sure state updates only one
     useEffect(() => {
         getUsers()
     },[])
     
+    // JSX Element
     return (
         <>
-        
         <center>
         <h1>Search</h1>
             {

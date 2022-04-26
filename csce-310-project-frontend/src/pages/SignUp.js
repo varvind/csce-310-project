@@ -3,17 +3,19 @@ import { useNavigate } from "react-router-dom";
 import Cookies from 'js-cookie';
 import React from 'react';
 
-
-
+// Developed By Arvind V.
 const SignUp = () => {
     const [inputs, setInputs] = useState({});
     const navigate = useNavigate();
+
+    // Form Change Handler
     const handleChange = (event) => {
         const name = event.target.name;
         const value = event.target.value;
         setInputs(values => ({...values, [name]: value}))
     }
 
+    // Form Submit Handler
     const handleSubmit = async (event) => {
         event.preventDefault();
         let response = await fetch('http://localhost:4000/user/create', {
@@ -41,6 +43,7 @@ const SignUp = () => {
         }
     }
     
+    // JSX Element
     return(
         <>
         <center>

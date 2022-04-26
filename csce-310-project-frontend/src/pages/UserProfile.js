@@ -3,6 +3,7 @@ import styles from './css/profile.module.css'
 import {useParams} from "react-router-dom";
 import Cookies from 'js-cookie';
 
+// Developed by Arvind V.
 const UserProfile = () => {
     const [user, setUser] = useState({
         first_name: "",
@@ -14,6 +15,7 @@ const UserProfile = () => {
     const loggedInUserId = Cookies.get('userId')
     const { user_id } = useParams();
 
+    // Get User Profile
     const getUser = () => {
         fetch(`http://localhost:4000/user/get/${user_id}`)
         .then((response) => response.json())
@@ -30,6 +32,7 @@ const UserProfile = () => {
         })
     }
 
+    // Check to see if Friends with this User
     const verifyIfFriendExists = () => {
         if(!loggedInUserId) {
             setState(false)
@@ -46,6 +49,7 @@ const UserProfile = () => {
         } 
     }
 
+    // Form Submit Handler
     const handleSubmit = async () => {
         if(!loggedInUserId) {
             alert('Must Be Signed in To Add Friends')
@@ -66,11 +70,13 @@ const UserProfile = () => {
         }
     }
 
+    // Make sure state change happens only once
     useEffect(() => {
         getUser()
         verifyIfFriendExists()
     },[])
 
+    // JSX Element
     return(
         <>
         <div className = {styles.backsplash}> 

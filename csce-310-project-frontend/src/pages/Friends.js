@@ -2,19 +2,19 @@ import React, {useState, useEffect,} from 'react';
 import Cookies from 'js-cookie';
 import axios from 'axios'
 
+// Developed by Arvind V.
 const  Friends  = () => {
     const [state, setState] = useState( {
         friends : [],
         requests: []
     });
-
     const style = {
         width:"18rem",
         marginTop: "1%",
     }
     let user_id = Cookies.get('userId')
     
-
+    // Get All Friends for the User
     const getFriends = () => {
         let user_id = Cookies.get('userId')
         fetch(`http://localhost:4000/friends/get/${user_id}`)
@@ -40,6 +40,7 @@ const  Friends  = () => {
         })
     }
 
+    // Delete Friend Handler
     const handleDeleteFriend = async (e) => {
         console.log("deleting friends")
         e.preventDefault()
@@ -59,6 +60,7 @@ const  Friends  = () => {
         })
     }
 
+    // Form Handler
     const handleSubmit = async (e) => {
         e.preventDefault()
         const inputs = Object.values(e.target)
@@ -84,10 +86,12 @@ const  Friends  = () => {
         }
     }
 
+    // Ensure state change happens only once
     useEffect(() => {
         getFriends()
     },[])
 
+    // JSX Element
     return(
         <>
             <center>
