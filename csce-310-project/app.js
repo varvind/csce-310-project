@@ -10,9 +10,11 @@ var cors = require('cors')
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-var friendsRouter = require('./routes/friends')
+var friendsRouter = require('./routes/friends');
 var adminRouter = require('./routes/admin');
 var membersRouter = require('./routes/members');
+var commentsRouter = require('./routes/comments');
+var eventsRouter = require('./routes/events');
 
 var app = express();
 
@@ -24,11 +26,18 @@ app.use(cors())
 
 const Pool = require('pg').Pool
 global.pool = new Pool({
-  user: 'arvind',
+  /*
+  user: 'jason',
   host: 'localhost',
   database: 'maroonlink',
   password: 'arvind00',
   port: 5432,
+  */
+  user: 'me',
+  host: 'localhost',
+  database: 'maroonlink',
+  password: 'password',
+  port: 5433,
 })
 port = 4000
 
@@ -44,13 +53,19 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/user', usersRouter);
-app.use('/friends', friendsRouter)
+app.use('/friends', friendsRouter);
 app.use('/admin', adminRouter);
 app.use('/members', membersRouter);
+app.use('/comments', commentsRouter);
+app.use('/events', eventsRouter);
 
 // catch 404 and forward to error handler
-app.listen(port, () => {
-  console.log(`App running on port ${port}`)
+app.listen(port, function(error) {
+  if (error) {
+    console.log('Something went wrong', error)
+  } else {
+    console.log(`App running on port ${port}`)
+  }
 })
 
 module.exports = app;
