@@ -44,7 +44,7 @@ router.get("/mycomments/:userId", (req, res) => {
 })
 
 /*
- *  Functionality: Allow editing of comments
+ *  Functionality: Allow editing any user comments
  */
 router.post("/update/:userId", (req, res) => {
     const {old_comment, new_comment} = req.body

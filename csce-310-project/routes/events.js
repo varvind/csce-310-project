@@ -6,13 +6,20 @@ var router = express.Router();
  *  Functionality: Add event to user's list
  */
 router.post("/create/:userId", (req, res, next) => {
-    const eventId = req.body
+    if (req.params.userId = null) {
+        res.status(308).send(`User not logged in`)
+    } else {
+        // insert
+        const {eventId, status} = req.body
+        pool.query("INSERT INTO Event_Followers(user_id, event_id, status) VALUES ($1, $2, $3)", [req.params.userId, eventId, status],() => {
+            if (error) {
+                throw error
+            }
 
-    pool.query("INSERT INTO Event_Followers", () => {
-        if (error) {
-            throw error
-        }
-    })
+            request = result.row[0]
+            res.status(201).send(`User has successfully added event ${request.eventId} to his list as status of ${request.status}`)
+        })
+    }  
 })
 
 /*
