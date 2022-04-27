@@ -2,31 +2,31 @@ import {Outlet, Link} from "react-router-dom"
 import Cookies from 'js-cookie';
 import React, { useState } from 'react';
 
-function useForceUpdate(){
-    const [value, setValue] = useState(0); // integer state
-    return () => setValue(value => value + 1); // update the state to force render
-}
-
+// Developed By Arvind V.
 const Layout = () => {
     const [inputs, setInputs] = useState({search:""});
+    const userId = Cookies.get('userId')
+
+    // Form Change Handler
     const handleChange = (event) => {
         const name = event.target.name;
         const value = event.target.value;
         setInputs(values => ({...values, [name]: value}))
     }
+
+    // Form Submit Handler
     const handleSubmit = async (event) => {
         event.preventDefault();
         window.location.href = `/search/items?query=${inputs.search}`
     }
 
+    // Logout Handler
     const logout = () => {
-        console.log("hi")
         Cookies.remove('userId')
         window.location.href = '/';
     }
 
-    console.log(inputs)
-    const userId = Cookies.get('userId')
+    // JSX Element
     return (
         <>
             <nav class="navbar navbar-expand-lg navbar-light bg-light">
