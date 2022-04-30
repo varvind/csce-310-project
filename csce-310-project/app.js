@@ -31,6 +31,9 @@ global.pool = new Pool({
   database: 'ddk0vf1jvu1bja',
   password: '7cd4efee07b148e1dee422269c3ebc0dfab92623a0e44caecf60dd1c3ff13bd8',
   port: 5432,
+  ssl: {
+    rejectUnauthorized: false
+  }
 })
 port = 4000
 
