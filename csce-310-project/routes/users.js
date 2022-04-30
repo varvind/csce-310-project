@@ -22,9 +22,11 @@ router.post('/create', function(req, res, next) {
     pool.query('INSERT INTO users (first_name, last_name, username, password, profile_bio) VALUES ($1, $2, $3, $4, $5) RETURNING *',
     [first_name, last_name, username, hash, profile_bio], (error, results) => {
       if (error) {
+        console.log(error)
         res.status(400).send("Error With Creating User, Please Check Users")
         next(error)
       }
+      console.log(results)
       res.status(201).send(`${results.rows[0].user_id}`)
     })
   });

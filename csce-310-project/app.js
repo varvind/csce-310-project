@@ -26,18 +26,14 @@ app.use(cors())
 
 const Pool = require('pg').Pool
 global.pool = new Pool({
-  /*
-  user: 'jason',
-  host: 'localhost',
-  database: 'maroonlink',
-  password: 'arvind00',
+  user: 'fcuztxukmokemk',
+  host: 'ec2-54-80-122-11.compute-1.amazonaws.com',
+  database: 'ddk0vf1jvu1bja',
+  password: '7cd4efee07b148e1dee422269c3ebc0dfab92623a0e44caecf60dd1c3ff13bd8',
   port: 5432,
-  */
-  user: 'me',
-  host: 'localhost',
-  database: 'maroonlink',
-  password: 'password',
-  port: 5433,
+  ssl: {
+    rejectUnauthorized: false
+  }
 })
 port = 4000
 

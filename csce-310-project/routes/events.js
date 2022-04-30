@@ -64,3 +64,5 @@ router.post("/delete/:userId", (req, res) => {
         res.status(200).send(`Successfully deleted ${request.event_id}`)
     })
 })
+
+module.exports = router;
