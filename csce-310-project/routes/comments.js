@@ -71,14 +71,6 @@ router.post("/delete/:userId", (req, res) => {
         request = results.row[0]
         res.status(200).send(`Successfully deleted the comment ${request.comments}`)
     })
-<<<<<<< HEAD
-})
-=======
-
-    // send deleted comment to console for testing
-    request = results.row[0]
-    res.status(200).send(`Successfully deleted the comment ${request.comments}`)
 })
 
 module.exports = router;
->>>>>>> master
