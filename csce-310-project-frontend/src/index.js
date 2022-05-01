@@ -12,6 +12,7 @@ import ChangeStatus from './pages/ChangeStatus'
 import Settings from './pages/user_settings/Settings'
 import Search from './pages/Search';
 import UserProfile from './pages/UserProfile'
+import AllComments from './pages/All_Comments'
 
 export default function App() {
   return (
@@ -27,6 +28,7 @@ export default function App() {
           <Route path='/change/status/:friend_id' element = {<ChangeStatus/>} />
           <Route path='/search/:query' element = {<Search/>}/>
           <Route path ='/profile/:user_id' element = {<UserProfile/>} />
+          <Route path ='/comments/all/:user_id' element = {AllComments} />
         </Route>
       </Routes>
     </BrowserRouter>
