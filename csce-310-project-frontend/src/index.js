@@ -13,6 +13,7 @@ import Settings from './pages/user_settings/Settings'
 import Search from './pages/Search';
 import UserProfile from './pages/UserProfile'
 import AllComments from './pages/All_Comments'
+import EventsList from './pages/EventsList'
 
 export default function App() {
   return (
@@ -28,7 +29,8 @@ export default function App() {
           <Route path='/change/status/:friend_id' element = {<ChangeStatus/>} />
           <Route path='/search/:query' element = {<Search/>}/>
           <Route path ='/profile/:user_id' element = {<UserProfile/>} />
-          <Route path ='/comments/all/:user_id' element = {AllComments} />
+          <Route path ='/mycomments/:user_id' element = {AllComments} />
+          <Route path='/myevents/:user_id' element = {EventsList}/>
         </Route>
       </Routes>
     </BrowserRouter>
