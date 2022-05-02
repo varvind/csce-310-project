@@ -26,7 +26,7 @@ router.post("/create/:userId", (req, res, next) => {
 /*
  *   Functionality: Pull all comments from a user.
  */
-router.get("/mycomments/:userId", (req, res) => {
+router.get("/get/:userId", (req, res) => {
     // Check if anyone is logged in.
     if (req.params.userId = null) {
         res.status(308).send(`Error user not logged in`)
@@ -46,9 +46,9 @@ router.get("/mycomments/:userId", (req, res) => {
 /*
  *  Functionality: Allow editing any user comments
  */
-router.post("/update/:userId", (req, res) => {
-    const {old_comment, new_comment} = req.body
-    pool.query("UPDATE Event_Comments SET comments = $1 WHERE userId = $2 AND comments = $3 RETURNING *", [new_comment, req.params.userId, old_comment],(error, results) => {
+router.post("/update/:userId/:comment_id", (req, res) => {
+    const new_comment = req.body
+    pool.query("UPDATE Event_Comments SET comments = $1 WHERE userId = $2 AND comment_id = $3 RETURNING *", [new_comment, req.params.userId, req.params.comment_id],(error, results) => {
         if (error) {
             throw error
         }
@@ -61,9 +61,9 @@ router.post("/update/:userId", (req, res) => {
 /*
  *  Functionality: Allow the deletion of comments
  */
-router.post("/delete/:userId", (req, res) => {
-    const comment_to_delete = req.body
-    pool.query("DELETE FROM Event_Comments WHERE user_id = $1 AND comments = $2", [req.params.userId, comment_to_delete],(error, results) => {
+router.post("/delete/:userId/:comment_id", (req, res) => {
+    // const comment_to_delete = req.body
+    pool.query("DELETE FROM Event_Comments WHERE user_id = $1 AND comments = $2", [req.params.userId, req.params.comment_id],(error, results) => {
         if (error) {
             throw error
         }
