@@ -8,6 +8,11 @@ const All_Comments = () => {
         comments: []
     });
     const [inputs, setInputs] = useState({});
+    const handleChange = (event) => {
+        const name = event.target.name;
+        const value = event.target.value;
+        setInputs(values => ({...values, [name]: value})) // maybe incorrect
+    }
     const style = {
         width: "18rem",
         marginTop: "1%",
@@ -114,7 +119,8 @@ const All_Comments = () => {
                         <center>
                             <div class="card" style={style}>
                                 <h5 class="card-body">
-                                    <h5 class="card-title">{key.Title + " " + key.comments}</h5>
+                                    <h5 class="card-title">{key.Title}</h5>
+                                    {key.comments}
                                     <a href={"/change/comment/" + key.user_id} class="card-link">Change Comment</a>
                                     <form onSubmit={handleEditComments} style ={{}}>
                                         <input type = "hidden" value = {key.comment_id} name = "comment_id"/>
