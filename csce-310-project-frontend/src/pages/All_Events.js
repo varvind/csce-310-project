@@ -12,8 +12,33 @@ const All_Events = ( {event_name} ) => {
         const value = event.target.value;
         setInputs(values => ({...values, [name]: value})) // maybe incorrect
     }
+    let user_id = Cookies.get('userId');
 
+    const getAllEvents = () => {
+        let user_id = Cookies.get('userId')
+        fetch(`http://localhost:4000/events/get/${user_id}`)
+        .then((response) => response.json())
+        .then((responseJson) => {
+            var commentList = []
+            responseJson.forEach(element => {
+                commentList.push(element)
+            })
+            
+            setState({
+                comments : commentList
+            })
+        }).catch((error) => {
+            console.error(error)
+        })
+    }
     
+    const handleEditStatus = () => {
+
+    }
+
+    const handleDeleteEvent = () => {
+
+    }
 
     // jsx element
     return (
