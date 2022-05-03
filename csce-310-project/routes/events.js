@@ -27,7 +27,6 @@ router.post("/create/:userId", (req, res, next) => {
  *  Functionality: Grab all events the user has marked/followed
  */
 router.get("/query/:userId", (req, res) => {
-    // query = "SELECT * FROM Events INNER JOIN Event_Followers ON Events.event_id = Event_Followers.event_id WHERE Event_Followers.user_id = $1"
     pool.query("SELECT * FROM Events INNER JOIN Event_Followers ON Events.event_id = Event_Followers.event_id WHERE Event_Followers.user_id = $1", [req.params.userId], (error, results) => {
         if (error) {
             throw error

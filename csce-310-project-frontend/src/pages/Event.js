@@ -15,6 +15,7 @@ const Event = ( {event_name} ) => {
             method: 'POST',
             headers: {'Content-Type':'application/json'},
             body: JSON.stringify({
+                "event_id": inputs.event_id, // CHECK HOW YOU ARE GETTING THIS VALUE
                 "comments": inputs.comment_text
             })
         });
@@ -44,6 +45,7 @@ const Event = ( {event_name} ) => {
             <form onSubmit={handleEventAdd}>
                 <input
                     type="text"
+                    placeholder="comment"
                     name="comment_text"
                     class="form-control"
                     values={inputs.comment_text || ""}
