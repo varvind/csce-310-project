@@ -8,26 +8,34 @@ router.post("/create/:userId", (req, res, next) => {
     if (req.params.userId = null) {
         res.status(308).send(`Error user not logged in`)
     } else {
-        // Insert into database
-        const {page_id, description} = req.body
-        pool.query("INSERT INTO pages (page_id, description, member_count) VALUES ($1, $2, $3) RETURNING *", [req.params.userId, description, member_count], () => {
+        const {description, member_count} = req.body
+        pool.query("INSERT INTO pages (user_id, description, member_count) VALUES ($1, $2, $3) RETURNING user_id, description", [req.params.userId, description, member_count], (error, result) => {
             if (error) {
-                throw error
+                console.log(error)
             }
 
             request = result.rows[0]
-            res.status(201).send(`Sucessfully created page for ${request.user_id} with description ${request.description}`)
+            res.status(201).send(`Sucessfully created page for ${result.user_id} with description ${result.description}`)
         })
     }
 })
 
 // update page
 router.post('/update/:page_id', (req, res) => {
-    const page_id = req.params.page_id
-    const description = req.body
-    pool.query('UPDATE page SET description = $2 WHERE page_id=$1', (error, result) => {
+    const {description, member_count} = req.body
+    query = 'UPDATE pages SET '
+    if(description != null && description != "") {
+        query += `description = \'${description}\', `
+      }
+    if(member_count != null && member_count != "") {
+      query += `member_count = \'${member_count}\', `
+    }
+    query = query.substring(0, query.length - 2)
+    query += ` where page_id = ${req.params.page_id}`
+    console.log(query)
+    pool.query(query, (error, result) => {
       if(error) {
-        next(error)
+        console.log(error)
       }
       res.status(201).send(`Page successfully updated`)
     })
@@ -35,14 +43,26 @@ router.post('/update/:page_id', (req, res) => {
 })
 
 // deletes admin page
-router.delete('/delete', function(req, res, next) {
-    const page_id = req.body.page_id
+router.delete('/delete/:page_id', function(req, res, next) {
+    const page_id = req.params.page_id
     pool.query("DELETE FROM pages WHERE page_id=$1", [page_id], (poolerr, poolres) => {
         if(poolerr) {
             console.log(poolerr)
             res.status(400).send("Could not delete page")
         }
         res.status(200).send("Page deleted")
+    })
+})
+
+// search page
+router.get('/get/:page_id', function(req, res, next){
+    const page_id = req.params.page_id
+    pool.query("SELECT * FROM page WHERE page_id=$1", [page_id], (poolerr, poolres) => {
+        if(poolerr) {
+            console.log(poolerr)
+            res.status(400).send("Page does not exist")
+        }
+        res.json(poolres.rows[0])
     })
 })
 
