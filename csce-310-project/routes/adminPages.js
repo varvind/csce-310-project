@@ -3,19 +3,19 @@ var express = require('express');
 var router = express.Router();
 
 // creates admin page
-router.post("/create/:userId", (req, res, next) => {
-    // Check if anyone is logged in. You should not be able to create a post from a null user.
-    if (req.params.userId = null) {
-        res.status(308).send(`Error user not logged in`)
+router.post("/create/:admin_id", (req, res, next) => {
+    // Check if anyone is logged in. You should not be able to create a post from a null admin
+    if (req.params.admin_id = null) {
+        res.status(308).send(`Error admin not logged in`)
     } else {
         const {description, member_count} = req.body
-        pool.query("INSERT INTO pages (user_id, description, member_count) VALUES ($1, $2, $3) RETURNING user_id, description", [req.params.userId, description, member_count], (error, result) => {
+        pool.query("INSERT INTO pages (admin_id, description, member_count) VALUES ($1, $2, $3) RETURNING admin_id, description", [req.params.admin_id, description, member_count], (error, result) => {
             if (error) {
                 console.log(error)
             }
 
             request = result.rows[0]
-            res.status(201).send(`Sucessfully created page for ${result.user_id} with description ${result.description}`)
+            res.status(201).send(`Sucessfully created page for ${result.admin_id} with description ${result.description}`)
         })
     }
 })
@@ -57,7 +57,7 @@ router.delete('/delete/:page_id', function(req, res, next) {
 // search page
 router.get('/get/:page_id', function(req, res, next){
     const page_id = req.params.page_id
-    pool.query("SELECT * FROM page WHERE page_id=$1", [page_id], (poolerr, poolres) => {
+    pool.query("SELECT * FROM pages WHERE page_id=$1", [page_id], (poolerr, poolres) => {
         if(poolerr) {
             console.log(poolerr)
             res.status(400).send("Page does not exist")
