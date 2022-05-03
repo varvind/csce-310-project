@@ -69,31 +69,9 @@ const All_Comments = () => {
         getComments()
     }, [])
 
-    /*
-    const [comments, setComments] = useState({});
-    const { user_id } = useParams();
-
-    const getComments = () => {
-        fetch(`http://localhost:4000/comments/get/${user_id}`)
-        .then(response => {
-            return response.text();
-        })
-        .then((data => {
-            setComments(data);
-        }))
-    }
-    
-    const deleteComment = () => {
-
-    }
-
-    const updateComment = () => {
-
-    }
-    */
     return (
         <center>
-
+            
         </center>
     /*
     <center>

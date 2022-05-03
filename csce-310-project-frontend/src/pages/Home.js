@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-import All_Comments from './All_Comments'
 import EventsList from './EventsList.js'
 import styles from './css/home_page.css'
 
