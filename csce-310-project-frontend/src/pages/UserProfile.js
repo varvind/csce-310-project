@@ -83,7 +83,7 @@ const UserProfile = () => {
         </div>
         
         <center>
-        
+
             <h2 className = {styles.user_name}>
                 {user.first_name + " " + user.last_name}
                 

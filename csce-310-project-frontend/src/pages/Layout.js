@@ -3,9 +3,11 @@ import Cookies from 'js-cookie';
 import React, { useState } from 'react';
 
 // Developed By Arvind V.
+// Admin features developed by Jason Hirsch
 const Layout = () => {
     const [inputs, setInputs] = useState({search:""});
     const userId = Cookies.get('userId')
+    const adminId = Cookies.get('adminId')
 
     // Form Change Handler
     const handleChange = (event) => {
@@ -23,6 +25,7 @@ const Layout = () => {
     // Logout Handler
     const logout = () => {
         Cookies.remove('userId')
+        Cookies.remove('adminId')
         window.location.href = '/';
     }
 
@@ -50,6 +53,14 @@ const Layout = () => {
                         </li>
                         </>
                     }
+                    {
+                        (adminId != null) &&
+                        <>
+                            <li class="nav-item">
+                                <Link class = "nav-link" to='/yourpages'>Your Pages</Link>
+                            </li>
+                        </>
+                    }
                     {   (userId != null) &&
                         <>
                             <li class="nav-item">
@@ -61,11 +72,17 @@ const Layout = () => {
                             <li class="nav-item">
                                 <Link class = "nav-link" to='/friends'>Friends</Link>
                             </li>
+                            <li class = "nav-item">
+                                <Link class = "nav-link" to="/allevents">My Events</Link>
+                            </li>
+                            <li class = "nav-item">
+                                <Link class = "nav-link" to="/allcomments">My Comments</Link>
+                            </li>
                             <li class="nav-item">
                                 <Link class = "nav-link" to='/' onClick={logout}>Logout</Link>
                             </li>
                         </>
-                    } 
+                    }
                     </ul>
                     <form class="form-inline my-2 my-lg-0" onSubmit={handleSubmit}>
                         <input class="form-control mr-sm-2" type="search" placeholder="Find Friends" value = {inputs.search || ""} name = "search" aria-label="Search" onChange={handleChange}/>
