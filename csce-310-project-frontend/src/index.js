@@ -12,7 +12,7 @@ import ChangeStatus from './pages/ChangeStatus'
 import Settings from './pages/user_settings/Settings'
 import Search from './pages/Search';
 import UserProfile from './pages/UserProfile'
-import YourPages from './YourPages';
+import YourPages from './pages/YourPages';
 
 export default function App() {
   return (

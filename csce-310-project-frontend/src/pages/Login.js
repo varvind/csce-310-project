@@ -4,6 +4,7 @@ import Cookies from 'js-cookie';
 import React from "react"
 
 // Developed by Arvind V.
+// Admin features developed by Jason Hirsch
 const Login = () => {
     const [inputs, setInputs] = useState({});
     const navigate = useNavigate();
@@ -28,10 +29,27 @@ const Login = () => {
          });
         
         if(response.status === 200) {
-            response.text().then((userId) => {
+            response.text().then(async (userId) => {
                 Cookies.set('userId', userId)
+
+                let adminResponse = await fetch('http://localhost:4000/admin/get/' + userId, {
+                    method: 'GET',
+                    headers: {'Content-Type': 'application/json'},
+                })
+                console.log(adminResponse)
+                if(adminResponse.status === 200) {
+                    adminResponse.json().then(adminJson => {
+                        console.log(adminJson);
+                        const adminId = adminJson.admin_id
+                        Cookies.set('adminId', adminId)
+                        window.location.href = '/';
+                    })
+                }
+                else {
+                    Cookies.remove('adminId')
+                    window.location.href = '/';
+                }                
             })
-            window.location.href = '/';   
         } else {
             response.text().then((errorMsg) => {
                 alert(errorMsg)
