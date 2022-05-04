@@ -31,7 +31,7 @@ export default function App() {
           <Route path='/search/:query' element = {<Search/>}/>
           <Route path ='/profile/:user_id' element = {<UserProfile/>} />
           <Route path ='/allcomments' element = {<All_Comments/>} />
-          <Route path='/myevents/:user_id' element = {<All_Events/>}/>
+          <Route path='/allevents' element = {<All_Events/>}/>
           <Route path='/profile/:user_id' element = {<UserProfile/>} />
           <Route path='/yourpages' element = {<YourPages />} />
           <Route path='/page/:page_id' />

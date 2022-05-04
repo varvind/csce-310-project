@@ -73,6 +73,9 @@ const Layout = () => {
                                 <Link class = "nav-link" to='/friends'>Friends</Link>
                             </li>
                             <li class = "nav-item">
+                                <Link class = "nav-link" to="/allevents">My Events</Link>
+                            </li>
+                            <li class = "nav-item">
                                 <Link class = "nav-link" to="/allcomments">My Comments</Link>
                             </li>
                             <li class="nav-item">

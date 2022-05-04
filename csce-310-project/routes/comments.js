@@ -6,14 +6,15 @@ var router = express.Router();
 /*
  *   Functionality: Creating a new post and storing it in the database
  */
-router.post("/create/:user_id", (req, res, next) => {
+router.post('/create/:user_id', (req, res, next) => {
     // Check if anyone is logged in. You should not be able to create a post from a null user.
-    if (req.params.user_id = null) {
+    const user_id = req.params.user_id;
+    const {event_id, user_comment} = req.body
+    if (user_id == null) {
         res.status(308).send(`Error user not logged in`)
     } else {
         // Insert into database
-        const user_id = req.params.user_id;
-        const {event_id, user_comment} = req.body
+        console.log(user_id, event_id, user_comment)
         pool.query("INSERT INTO event_comments (user_id, event_id, comments) VALUES ($1, $2, $3) RETURNING *", [user_id, event_id, user_comment], (error, results) => {
             if (error) {
                 console.log(error)
@@ -30,28 +31,31 @@ router.post("/create/:user_id", (req, res, next) => {
 /*
  *   Functionality: Pull all comments from a user.
  */
-router.get("/get/:user_id", (req, res) => {
+router.get('/get/:user_id', (req, res, next) => {
     // Check if anyone is logged in.
-    if (req.params.user_id = null) {
-        res.status(308).send(`Error user not logged in`)
-    } else {
-        // Pull comments and user info from database where userid of a row = the userid from the url
-        pool.query("SELECT event_comments.user_id, event_comments.comment_id, event_comments.event_id, event_comments.comments, users.username, events.title FROM event_comments INNER JOIN users ON event_comments.user_id = users.user_id INNER JOIN events ON event_comments.event_id = events.event_id WHERE event_comments.user_id = $1", [req.params.userId], (error, results) => {
-            if (error) {
-                console.log(error)
-                res.status(200).send(error)
-            } else {
-                // request = results.rows[0]
-                res.status(200).send(`Successfully pulled all comments`)
-            } 
-        })
-    }
+    // Pull comments and user info from database where userid of a row = the userid from the url
+    const user_id = req.params.user_id
+    console.log(user_id)
+    pool.query("SELECT event_comments.user_id, event_comments.comment_id, event_comments.event_id, event_comments.comments, users.username, events.title FROM event_comments INNER JOIN users ON event_comments.user_id = users.user_id INNER JOIN events ON event_comments.event_id = events.event_id WHERE event_comments.user_id = $1", [req.params.user_id], (error, result) => {
+        if (error) {
+            console.log(error)
+            res.status(200).send(error)
+            next(error)
+        } else {
+            // request = results.rows[0]
+            comments = []
+            if (result.rows.length > 0) {
+                comments = result.rows
+            }
+            res.status(200).send(comments)
+        } 
+    })
 })
 
 /*
  *  Functionality: Pull specific comment
  */
-router.get("/get/specific/:comment_id", (req, res) => {
+router.get('/get/specific/:comment_id', (req, res) => {
     pool.query("SELECT * FROM Event_Comments WHERE comment_id = $1", [req.params.comment_id], (error, results) => {
         if (error) {
             console.log(error)
@@ -66,7 +70,7 @@ router.get("/get/specific/:comment_id", (req, res) => {
 /*
  *  Functionality: Allow editing any user comments
  */
-router.post("/update/:userId", (req, res) => {
+router.post('/update/:userId', (req, res) => {
     const {comment_id, new_comment} = req.body
     pool.query("UPDATE Event_Comments SET comments = $1 WHERE userId = $2 AND comment_id = $3 RETURNING *", [new_comment, req.params.userId, comment_id],(error, results) => {
         if (error) {
@@ -83,7 +87,7 @@ router.post("/update/:userId", (req, res) => {
 /*
  *  Functionality: Allow the deletion of comments
  */
-router.post("/delete/:userId/:comment_id", (req, res) => {
+router.post('/delete/:userId/:comment_id', (req, res) => {
     pool.query("DELETE FROM Event_Comments WHERE user_id = $1 AND comment_id = $2", [req.params.userId, req.params.comment_id],(error, results) => {
         if (error) {
             console.log(error)
