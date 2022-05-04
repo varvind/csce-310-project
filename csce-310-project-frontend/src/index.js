@@ -14,6 +14,7 @@ import Search from './pages/Search';
 import UserProfile from './pages/UserProfile'
 import All_Comments from './pages/All_Comments'
 import All_Events from './pages/All_Events'
+import YourPages from './YourPages';
 
 export default function App() {
   return (
@@ -31,6 +32,9 @@ export default function App() {
           <Route path ='/profile/:user_id' element = {<UserProfile/>} />
           <Route path ='/allcomments' element = {<All_Comments/>} />
           <Route path='/myevents/:user_id' element = {<All_Events/>}/>
+          <Route path='/profile/:user_id' element = {<UserProfile/>} />
+          <Route path='/yourpages' element = {<YourPages />} />
+          <Route path='/page/:page_id' />
         </Route>
       </Routes>
     </BrowserRouter>

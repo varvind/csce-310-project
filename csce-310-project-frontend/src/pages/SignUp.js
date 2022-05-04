@@ -4,6 +4,7 @@ import Cookies from 'js-cookie';
 import React from 'react';
 
 // Developed By Arvind V.
+// Admin features developed by Jason Hirsch
 const SignUp = () => {
     const [inputs, setInputs] = useState({});
     const navigate = useNavigate();
@@ -18,6 +19,7 @@ const SignUp = () => {
     // Form Submit Handler
     const handleSubmit = async (event) => {
         event.preventDefault();
+
         let response = await fetch('http://localhost:4000/user/create', {
             method: 'POST',
             headers: {'Content-Type':'application/json'},
@@ -31,10 +33,35 @@ const SignUp = () => {
          });
 
         if(response.status === 201) {
-            response.text().then((userId) => {
+            response.text().then(async (userId) => {
                 alert("Successfully Created User")
                 Cookies.set('userId', userId)
-                window.location.href = '/'
+
+                if(inputs.adminChecked) {
+                    let adminResponse = await fetch('http://localhost:4000/admin/create', {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({
+                            user_id: userId
+                        })
+                    })
+
+                    if(adminResponse.status === 200) {
+                        adminResponse.json().then(adminJson => {
+                            const adminId = adminJson.admin_id;
+                            alert("Successfully Created Admin")
+                            Cookies.set('adminId', adminId);
+                            window.location.href = '/'
+                        })
+                    }
+                    else {
+                        alert("Unable to create admin")
+                        navigate('/signup')
+                    }
+                }
+                else {
+                    window.location.href = '/'
+                }
             })
             
         } else {
@@ -99,6 +126,11 @@ const SignUp = () => {
                 />
             </label>
             <br/>
+            <label>
+                Admin
+                <input type="checkbox" name="adminChecked" value={inputs.adminChecked === "true" ? "false" : "true"} style={{ marginLeft: "1rem" }} onChange={handleChange} />
+            </label>
+            <br />
             <input type="submit" class="btn btn-primary" />
         </form>
         </center>
