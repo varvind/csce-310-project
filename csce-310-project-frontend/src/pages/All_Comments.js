@@ -7,12 +7,14 @@ const All_Comments = () => {
     const [state, setState] = useState( {
         comments: []
     });
+    /*
     const [inputs, setInputs] = useState({});
     const handleChange = (event) => {
         const name = event.target.name;
         const value = event.target.value;
         setInputs(values => ({...values, [name]: value})) // maybe incorrect
     }
+    */
     const style = {
         width: "18rem",
         marginTop: "1%",
@@ -28,7 +30,7 @@ const All_Comments = () => {
             var commentList = []
             responseJson.forEach(element => {
                 commentList.push(element)
-            })
+            });
             
             setState({
                 comments : commentList
@@ -126,7 +128,7 @@ const All_Comments = () => {
                                     <a href={"/change/comment/" + key.user_id} class="card-link">Change Comment</a>
                                     <form onSubmit={handleEditComments} style ={{}}>
                                         <input type = "hidden" value = {key.comment_id} name = "comment_id"/>
-                                        <input type = "text" value = {inputs.new_comment_text || ""}/>
+                                        <input type = "text" value = {key.new_comment_text || ""}/>
                                         <input type = "submit" class="btn btn-primary" value = "Edit Comment"/>
                                     </form>
                                     <form onSubmit={handleDeleteComments} style={{}}>
@@ -141,22 +143,6 @@ const All_Comments = () => {
             })}
         </center>
         </>
-    /*
-    <center>
-
-        <h2>
-            {user.first_name + " " + user.last_name}
-                
-        </h2>
-        { showButton && 
-            <form onSubmit={handleSubmit} style ={{}}>
-                    <input type="submit" class="btn btn-primary" value = "Add Friend"/>
-            </form>
-        }
-        <p className = {styles.profile_bio}>@{user.username}</p>
-        <p className = {styles.profile_bio}>{user.profile_bio}</p>
-    </center>
-    */
     )
 }
 
