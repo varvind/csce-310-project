@@ -13,6 +13,7 @@ import Settings from './pages/user_settings/Settings'
 import Search from './pages/Search';
 import UserProfile from './pages/UserProfile'
 import All_Comments from './pages/All_Comments'
+import ChangeComment from './pages/ChangeComment'
 import All_Events from './pages/All_Events'
 import YourPages from './YourPages';
 
@@ -31,6 +32,7 @@ export default function App() {
           <Route path='/search/:query' element = {<Search/>}/>
           <Route path ='/profile/:user_id' element = {<UserProfile/>} />
           <Route path ='/allcomments' element = {<All_Comments/>} />
+          <Route path ='/change/comment/:comment_id' element = {<ChangeComment/>} />
           <Route path='/allevents' element = {<All_Events/>}/>
           <Route path='/profile/:user_id' element = {<UserProfile/>} />
           <Route path='/yourpages' element = {<YourPages />} />
