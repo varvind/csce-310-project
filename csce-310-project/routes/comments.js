@@ -5,20 +5,21 @@ var router = express.Router();
 /*
  *   Functionality: Creating a new post and storing it in the database
  */
-router.post("/create/:userId", (req, res, next) => {
+router.post("/create/:user_id", (req, res, next) => {
     // Check if anyone is logged in. You should not be able to create a post from a null user.
     if (req.params.userId = null) {
         res.status(308).send(`Error user not logged in`)
     } else {
         // Insert into database
         const {event_id, user_comment} = req.body
-        pool.query("INSERT INTO event_comments (user_id, event_id, comment) VALUES ($1, $2, $3) RETURNING *", [req.params.userId, event_id, user_comment], (error, results) => {
+        pool.query("INSERT INTO event_comments (user_id, event_id, comments) VALUES ($1, $2, $3) RETURNING *", [req.params.user_id, event_id, user_comment], (error, results) => {
             if (error) {
-                throw error
+                console.log(error)
+                res.status(200).send(error)
+            } else {
+                request = result.rows[0]
+                res.status(201).send(`Sucessfully created comment from ${request.user_id} in event ${request.event_id}`)
             }
-
-            request = result.rows[0]
-            res.status(201).send(`Sucessfully created comment from ${request.user_id} in event ${request.event_id}`)
         })
     }
 })
@@ -37,8 +38,8 @@ router.get("/get/:userId", (req, res) => {
                 throw error
             }
 
-            // request = results.rows[0]
-            res.status(200).send(`Successfully pulled all comments from ${req.params.userId}`)
+            request = results.rows[0]
+            res.status(200).send(`Successfully pulled all comments from ${request.user_id}`)
         })
     }
 })

@@ -6,12 +6,6 @@ const All_Events = ( {event_name} ) => {
     const [state, setState] = useState( {
         events: []
     });
-    const [inputs, setInputs] = useState({});
-    const handleChange = (event) => {
-        const name = event.target.name;
-        const value = event.target.value;
-        setInputs(values => ({...values, [name]: value})) // maybe incorrect
-    }
     let user_id = Cookies.get('userId');
 
     const getAllEvents = () => {
