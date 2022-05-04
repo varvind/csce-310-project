@@ -5,10 +5,15 @@ export default function YourPages(props) {
     const [pages, setPages] = useState([]);
     const adminId = Cookies.get('adminId')
 
-    function handleSubmit(event) {
+    const handleSubmit = async (event) => {
         event.preventDefault();
 
-        let response = await fetch('http://localhost:4000/user/create')
+        let response = await fetch('http://localhost:4000/pages/create/${adminId}', {
+            method: 'POST',
+            headers: {'Content-Type':'application/json'},
+            body: JSON.stringify({})
+        });
+        if(response.status === 201) {}
     }
 
     return (

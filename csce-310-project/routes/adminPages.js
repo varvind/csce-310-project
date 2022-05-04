@@ -9,13 +9,15 @@ router.post("/create/:admin_id", (req, res, next) => {
         res.status(308).send(`Error admin not logged in`)
     } else {
         const {description, member_count} = req.body
-        pool.query("INSERT INTO pages (admin_id, description, member_count) VALUES ($1, $2, $3) RETURNING admin_id, description", [req.params.admin_id, description, member_count], (error, result) => {
+        pool.query("INSERT INTO pages (admin_id, description, member_count) VALUES ($1, $2, $3) RETURNING admin_id, description, member_count", [req.params.admin_id, description, member_count], (error, results) => {
             if (error) {
                 console.log(error)
             }
 
-            request = result.rows[0]
-            res.status(201).send(`Sucessfully created page for ${result.admin_id} with description ${result.description}`)
+            // request = result.rows[0]
+            // res.status(201).send(`Sucessfully created page for ${result.admin_id} with description ${result.description}`)
+            res.status(201).send(`${results.rows[0].page_id}`)
+            
         })
     }
 })
