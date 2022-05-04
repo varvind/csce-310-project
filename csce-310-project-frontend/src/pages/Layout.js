@@ -62,7 +62,7 @@ const Layout = () => {
                                 <Link class = "nav-link" to='/friends'>Friends</Link>
                             </li>
                             <li class = "nav-item">
-                                <Link class = "nav-link" to="/allcomments"></Link>
+                                <Link class = "nav-link" to="/allcomments">My Comments</Link>
                             </li>
                             <li class="nav-item">
                                 <Link class = "nav-link" to='/' onClick={logout}>Logout</Link>

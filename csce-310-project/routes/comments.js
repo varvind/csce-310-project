@@ -32,7 +32,7 @@ router.get("/get/:userId", (req, res) => {
         res.status(308).send(`Error user not logged in`)
     } else {
         // Pull comments and user info from database where userid of a row = the userid from the url
-        pool.query("SELECT Event_Comments.user_id, Event_Comments.comment_id, Event_Comments.event_id, Event_Comments.comments, Users.username, Event.Title FROM Event_Comments INNER JOIN Users ON Event_Comments.user_id = Users.user_id INNER JOIN on Event_Comments.event_id = Events.event_id WHERE user_id = $1", [req.params.userId], (error, results) => {
+        pool.query("SELECT event_comments.user_id, event_comments.comment_id, event_comments.event_id, event_comments.comments, users.username, event.title FROM event_comments INNER JOIN users ON event_comments.user_id = users.user_id INNER JOIN events ON event_comments.event_id = events.event_id WHERE event_comments.user_id = $1", [req.params.userId], (error, results) => {
             if (error) {
                 throw error
             }

@@ -111,6 +111,8 @@ const All_Comments = () => {
     }, [])
 
     return (
+        <>
+        
         <center>
             <h3>Comments</h3>
             {state.comments.map((key, value) => {
@@ -138,6 +140,7 @@ const All_Comments = () => {
                 )
             })}
         </center>
+        </>
     /*
     <center>
 
