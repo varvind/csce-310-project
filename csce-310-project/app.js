@@ -15,6 +15,8 @@ var adminRouter = require('./routes/admin');
 var membersRouter = require('./routes/members');
 var commentsRouter = require('./routes/comments');
 var eventsRouter = require('./routes/events');
+var pagesRouter = require('./routes/adminPages');
+var adminEventsRouter = require('./routes/adminevents');
 
 var app = express();
 
@@ -26,10 +28,10 @@ app.use(cors())
 
 const Pool = require('pg').Pool
 global.pool = new Pool({
-  user: 'fcuztxukmokemk',
-  host: 'ec2-54-80-122-11.compute-1.amazonaws.com',
-  database: 'ddk0vf1jvu1bja',
-  password: '7cd4efee07b148e1dee422269c3ebc0dfab92623a0e44caecf60dd1c3ff13bd8',
+  user: 'cvljeupgtzffuh',
+  host: 'ec2-44-194-117-205.compute-1.amazonaws.com',
+  database: 'd5ap5tsdtu1a7c',
+  password: '83d5861c5f75ea59a2ba6d1111a1f4f8eee837d20a8d74d0640fd41f98b2f361',
   port: 5432,
   ssl: {
     rejectUnauthorized: false
@@ -54,6 +56,8 @@ app.use('/admin', adminRouter);
 app.use('/members', membersRouter);
 app.use('/comments', commentsRouter);
 app.use('/events', eventsRouter);
+app.use('/adminEvents', adminEventsRouter);
+app.use('/pages', adminPagesRouter);
 
 // catch 404 and forward to error handler
 app.listen(port, function(error) {
