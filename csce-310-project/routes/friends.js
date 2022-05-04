@@ -27,7 +27,7 @@ router.post("/create/request/:user_id/:requested_user_id", (req, res, next) => {
 router.post("/add", (req, res, next) => {
     const requested_user_id = req.body.requested_id
     const user_id = req.body.user_id
-
+    console.log(requested_user_id, user_id)
     pool.query("DELETE FROM friend_request where user_initiator_id = $1 and user_id = $2", [requested_user_id, user_id], (error, result) => {
         if(error) {
             throw error

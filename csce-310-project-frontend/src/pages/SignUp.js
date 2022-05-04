@@ -60,6 +60,7 @@ const SignUp = () => {
                     }
                 }
                 else {
+                    Cookies.remove('adminId')
                     window.location.href = '/'
                 }
             })
