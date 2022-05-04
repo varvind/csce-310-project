@@ -16,6 +16,7 @@ import All_Comments from './pages/All_Comments'
 import ChangeComment from './pages/ChangeComment'
 import All_Events from './pages/All_Events'
 import YourPages from './YourPages';
+import YourPages from './pages/YourPages';
 
 export default function App() {
   return (

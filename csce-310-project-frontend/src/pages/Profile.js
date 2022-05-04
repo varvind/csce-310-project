@@ -3,6 +3,7 @@ import styles from './css/profile.module.css'
 import Cookies from 'js-cookie';
 
 // Developed by Arvind V
+// Admin features developed by Jason Hirsch
 class Profile extends React.Component{
 
     constructor() {
@@ -11,13 +12,17 @@ class Profile extends React.Component{
             first_name : null,
             last_name: null,
             profile_bio: null,
-            username: null
+            username: null,
+            isAdmin: false
         };
     }
 
 
     componentDidMount() {
         this.getUser()
+        if(Cookies.get('adminId') != null) {
+            this.setState({ isAdmin: true })
+        }
     }
 
     // Get User Elements for Profile
@@ -47,6 +52,10 @@ class Profile extends React.Component{
             </div>
             <center>
                 <h2 className = {styles.name}>{this.state.first_name + " " + this.state.last_name}</h2>
+                {
+                    (this.state.isAdmin) &&
+                    <h3 className = {styles.admin_text}>You are an Admin</h3>
+                }
                 <p className = {styles.profile_bio}>@{this.state.username}</p>
                 <p className = {styles.profile_bio}>{this.state.profile_bio}</p>
             </center>
