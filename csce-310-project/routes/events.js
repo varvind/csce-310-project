@@ -30,7 +30,7 @@ router.post("/create/:user_id", (req, res) => {
  */
 router.get("/get/:user_id", (req, res) => {
     console.log("Get request from:", req.params.user_id)
-    pool.query('SELECT * FROM "adminEvents" INNER JOIN event_followers ON "adminEvents".event_id = event_followers.event_id WHERE event_followers.user_id = $1', [req.params.user_id], (error, result) => {
+    pool.query('SELECT * FROM admin_events INNER JOIN event_followers ON admin_events.event_id = event_followers.event_id WHERE event_followers.user_id = $1', [req.params.user_id], (error, result) => {
         if (error) {
             console.log(error)
             res.status(200).send(error)
@@ -41,6 +41,22 @@ router.get("/get/:user_id", (req, res) => {
                 events = result.rows
             }
             res.status(200).send(events)
+        }
+    })
+})
+
+/*
+ *  Functionality: Get a specific event
+ */
+router.get('/get/specific/:event_id', (req, res) => {
+    pool.query('SELECT admin_events.title, event_followers.status INNER JOIN event_followers on admin_events.event_id = event_followers.event_id WHERE event_id = $1', [req.params.event_id], (error, results) => {
+        if (error) {
+            console.log(error)
+            res.status(200).send(error)
+        } else {
+            request = []
+            request = results.rows[0]
+            res.status(200).send(request)
         }
     })
 })

@@ -19,12 +19,21 @@ const changeEventStatus = () => {
 
     // Form Submit Handler: handles the event when the user presses the submit button
     const handleSubmit = async (e) => {
-    
+        console.log("Editing Event Status")
+        e.preventDefault()
+
+        // text retrieved from form
+        
+    }
+
+    const getEvent = () => {
+        
     }
 
 
     // run getComment when page is loaded
     useEffect(() => {
+        getEvent();
     }, [])
 
     return(
