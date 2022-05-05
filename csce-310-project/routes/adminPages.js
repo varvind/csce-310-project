@@ -8,8 +8,8 @@ router.post("/create/:admin_id", (req, res, next) => {
     if (req.params.admin_id = null) {
         res.status(308).send(`Error admin not logged in`)
     } else {
-        const {description, member_count} = req.body
-        pool.query("INSERT INTO pages (admin_id, description, member_count) VALUES ($1, $2, $3) RETURNING admin_id, description, member_count", [req.params.admin_id, description, member_count], (error, results) => {
+        const {description, member_count, name} = req.body
+        pool.query("INSERT INTO pages (admin_id, description, member_count, name) VALUES ($1, $2, $3, $4) RETURNING admin_id, description, member_count", [req.params.admin_id, description, member_count, name], (error, results) => {
             if (error) {
                 console.log(error)
             }
@@ -24,13 +24,16 @@ router.post("/create/:admin_id", (req, res, next) => {
 
 // update page
 router.post('/update/:page_id', (req, res) => {
-    const {description, member_count} = req.body
+    const {description, member_count, name} = req.body
     query = 'UPDATE pages SET '
     if(description != null && description != "") {
         query += `description = \'${description}\', `
-      }
+    }
     if(member_count != null && member_count != "") {
       query += `member_count = \'${member_count}\', `
+    }
+    if(name != null && name != "") {
+        query += `name = \'${name}\', `
     }
     query = query.substring(0, query.length - 2)
     query += ` where page_id = ${req.params.page_id}`
