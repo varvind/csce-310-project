@@ -62,14 +62,17 @@ router.post("/update/:userId", (req, res) => {
 /*
  *  Functionality: Delete/Unfollow the event
  */
-router.post("/delete/:userId", (req, res) => {
-    const {eventId} = req.body
-    pool.query("DELETE FROM event_followers WHERE user_id = $1 AND event_id = $2", [req.params.userId, eventId], (error, results) => {
+router.delete("/delete/:user_id/:event_id", (req, res) => {
+    console.log("Deleting Event:", req.params.event_id, ". Initiated by user:", req.params.user_id)
+    pool.query("DELETE FROM event_followers WHERE user_id = $1 AND event_id = $2", [req.params.user_id, req.params.event_id], (error, results) => {
         if (error) {
-            throw error
-        }
-        request = results.row
-        res.status(200).send(`Successfully deleted ${request.event_id}`)
+            console.log(error)
+            res.status(500).send(error)
+        } else {
+            // send deleted event to console for testing
+            // request = results.row[0]
+            res.status(200).send(`Successfully deleted the event`)
+        } 
     })
 })
 

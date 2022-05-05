@@ -104,10 +104,10 @@ router.post('/update/:userId', (req, res) => {
 router.delete('/delete/:user_id/:comment_id', (req, res) => {
     console.log(`Delete query`)
     console.log(`user_id = ${req.params.user_id} and comment_id = ${req.params.comment_id}`)
-    pool.query("DELETE FROM Event_Comments WHERE user_id = $1 AND comment_id = $2", [req.params.user_id, req.params.comment_id],(error, results) => {
+    pool.query("DELETE FROM event_comments WHERE user_id = $1 AND comment_id = $2", [req.params.user_id, req.params.comment_id],(error, results) => {
         if (error) {
             console.log(error)
-            res.status(200).send(error)
+            res.status(500).send(error)
         } else {
             // send deleted comment to console for testing
             // request = results.row[0]

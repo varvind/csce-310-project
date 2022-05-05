@@ -44,13 +44,9 @@ const All_Events = () => {
             console.error(error)
         })
     }
-    
-    const handleEditStatus = async (e) => {
-
-    }
 
     const handleDeleteEvent = async (e) => {
-        console.log("Deleting Comment")
+        console.log("Deleting Event")
         e.preventDefault()
         const inputs = Object.values(e.target)
         .filter(c => typeof c.tagName === 'string' && c.tagName.toLowerCase() === 'input')
@@ -61,10 +57,10 @@ const All_Events = () => {
         .then((response) => {
             if (response.status === 200) {
                 alert('Succesfully deleted event')
-                window.location.href = '/events'
+                window.location.href = '/allevents'
             } else {
                 alert('Error in deleting event')
-                window.location.href = '/events'
+                window.location.href = '/allevents'
             }
         })
     }
@@ -83,7 +79,17 @@ const All_Events = () => {
                             <>
                                 <center>
                                     <div class="card" style={style}>
-                                        Hi
+                                        <h5 class="card-body">
+                                            <h4 class="card-title"><u>{key.title}</u></h4>
+                                            <h6 class="font-weight-normal">{key.description}</h6>
+                                            <div style={buttonStyle}>
+                                                <a href={"/change/event/status/" + key.event_id} clas="card-link"><h6>Change Event Status</h6></a>
+                                                <form onSubmit={handleDeleteEvent} style={deleteFormStyle}>
+                                                    <input type="hidden" value={key.event_id} name="event_id"/>
+                                                    <input type="submit" class="btn btn-primary" value="Delete Event"/>
+                                                </form>
+                                            </div>
+                                        </h5>
                                     </div>
                                 </center>
                             </>
