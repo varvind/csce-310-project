@@ -12,8 +12,7 @@ router.post("/create/:admin_id", (req, res, next) => {
             res.status(400).send("error creating page")
             next(error)
         }
-        // request = result.rows[0]
-        // res.status(201).send(`Sucessfully created page for ${result.admin_id} with description ${result.description}`)
+        
         res.status(201).send(`${results.rows[0]}`)
         
     })
@@ -35,7 +34,7 @@ router.post('/update/:page_id', (req, res) => {
     query1 = query1.substring(0, query1.length - 2)
     // console.log(query)
     query1 += ` where page_id = ${req.params.page_id}`
-    console.log(req.params.page_id)
+    console.log(query1)
     pool.query(query1, (error, result) => {
       if(error) {
         console.log(error)

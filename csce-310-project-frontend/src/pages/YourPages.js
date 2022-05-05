@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios'
 import { useNavigate } from "react-router-dom";
 
-
+// made and edited by the best coder in the team: Jakob Evangelista
 const  YourPages = () => {
     const [state, setState] = useState({
         pages : []
@@ -71,7 +71,7 @@ const  YourPages = () => {
                         <center>
                             <div class="card" style={style}>
                                 <div class="card-body">
-                                    <h5 class="card-title">{key.name}</h5>
+                                    <h5 class="card-title">{key.page_name}</h5>
                                     <p class = "card-text">{key.description}</p>
                                     <p class = "card-text">Member Count: {key.member_count}</p>
                                     {/* need to figure out how to link to edit page */}
