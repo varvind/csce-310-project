@@ -62,44 +62,12 @@ const All_Comments = () => {
         })
     }
 
-    const handleEditComments = async (e) => {
-        console.log("Editing comment")
-        e.preventDefault()
-        const inputs = Object.values(e.target)
-        .filter(c => typeof c.tagName === 'string' && c.tagName.toLowerCase() === 'input')
-        .reduce((acc, curr) => ({ ...acc, [curr.name]: curr.value }), {});
-        
-        // inputs retrieved from form
-        const comment_id = inputs.comment_id
-        const new_comment_text = state.new_comment_text
-
-        let response = await fetch(`http://localhost:4000/comments/update/${user_id}`, {
-            method: 'POST',
-            headers: {'Content-Type':'application/json'},
-            body: JSON.stringify({
-                "comment_id": comment_id,
-                "new_comment": new_comment_text
-            })
-        });
-        
-        if (response.status === 200) {
-            response.text().then(async (comment_id) => {
-                alert("Successfully updated comment")
-                window.location.href = '/allcomments'
-            })
-        } else {
-            alert("Unable to update comment")
-            window.location.href = "/allcomments"
-        }
-    }
-
     useEffect(() => {
         getComments()
     }, [])
 
     return (
         <>
-        
         <center>
             <h3>Comments</h3>
             {state.comments.map((key, value) => {
