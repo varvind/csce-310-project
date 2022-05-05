@@ -8,13 +8,6 @@ const All_Comments = () => {
         comments: []
     });
     
-    const [inputs, setInputs] = useState({});
-    const handleChange = (event) => {
-        const name = event.target.name;
-        const value = event.target.value;
-        setInputs(values => ({...values, [name]: value})) // maybe incorrect
-    }
-
     const style = {
         width: "26rem",
         marginTop: "1%",
@@ -24,11 +17,7 @@ const All_Comments = () => {
         flexDirection: 'row',
         justifyContent: 'space-between'
     }
-    const editButtonStyle = {
-        marginLeft: "1%",
-        padding: "2.2px 5px",
-        marginBottom: "1.1%"
-    }
+
     const deleteFormStyle = {
         marginTop: "1%"
     }
@@ -73,44 +62,12 @@ const All_Comments = () => {
         })
     }
 
-    const handleEditComments = async (e) => {
-        console.log("Editing comment")
-        e.preventDefault()
-        const inputs = Object.values(e.target)
-        .filter(c => typeof c.tagName === 'string' && c.tagName.toLowerCase() === 'input')
-        .reduce((acc, curr) => ({ ...acc, [curr.name]: curr.value }), {});
-        
-        // inputs retrieved from form
-        const comment_id = inputs.comment_id
-        const new_comment_text = state.new_comment_text
-
-        let response = await fetch(`http://localhost:4000/comments/update/${user_id}`, {
-            method: 'POST',
-            headers: {'Content-Type':'application/json'},
-            body: JSON.stringify({
-                "comment_id": comment_id,
-                "new_comment": new_comment_text
-            })
-        });
-        
-        if (response.status === 200) {
-            response.text().then(async (comment_id) => {
-                alert("Successfully updated comment")
-                window.location.href = '/allcomments'
-            })
-        } else {
-            alert("Unable to update comment")
-            window.location.href = "/allcomments"
-        }
-    }
-
     useEffect(() => {
         getComments()
     }, [])
 
     return (
         <>
-        
         <center>
             <h3>Comments</h3>
             {state.comments.map((key, value) => {
@@ -119,19 +76,13 @@ const All_Comments = () => {
                         <center>
                             <div class="card" style={style}>
                                 <h5 class="card-body">
-                                    <h4 class="card-title">{key.title}</h4>
-                                    {key.comments}
+                                    <h4 class="card-title"><u>{key.title}</u></h4>
+                                    <h6 class="font-weight-normal">{key.comments}</h6>
                                     <div style={buttonStyle}>
-                                        <a href={"/change/comment/" + key.comment_id} class="card-link">Edit Comment</a>
-                                        {/*<form onSubmit={handleEditComments} style ={{}}>
-                                            <input type = "hidden" value = {key.comment_id} name = "comment_id"/>
-                                            <input type = "text" defaultValue = {inputs.new_comment_text} onChange={handleChange}/>
-                                            <input type = "submit" class="btn btn-primary" value = "Edit Comment" style={editButtonStyle}/>
-                                        </form>
-                */}
+                                        <a href={"/change/comment/" + key.comment_id} class="card-link"><h6>Edit Comment</h6></a>
                                         <form onSubmit={handleDeleteComments} style={deleteFormStyle}>
                                             <input type = "hidden" value = {key.comment_id} name = "comment_id"/>
-                                            <input type = "submit" class="btn btn-primary" value = "Delete Comment" style={editButtonStyle}/>
+                                            <input type = "submit" class="btn btn-primary" value = "Delete Comment"/>
                                         </form>
                                     </div>
                                 </h5>

@@ -65,13 +65,14 @@ router.get('/get/:user_id', (req, res, next) => {
  *  Functionality: Pull specific comment
  */
 router.get('/get/specific/:comment_id', (req, res) => {
-    pool.query("SELECT * FROM Event_Comments WHERE comment_id = $1", [req.params.comment_id], (error, results) => {
+    pool.query("SELECT comments FROM Event_Comments WHERE comment_id = $1", [req.params.comment_id], (error, results) => {
         if (error) {
             console.log(error)
             res.status(200).send(error)
         } else {
-            // request = results.rows
-            res.status(200).send(`Pulled comment`)
+            request = []
+            request = results.rows[0]
+            res.status(200).send(request)
         }
     })
 })

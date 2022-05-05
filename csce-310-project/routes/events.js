@@ -7,7 +7,7 @@ var router = express.Router();
  *  Functionality: Add event to user's list
  */
 router.post("/create/:userId", (req, res, next) => {
-    if (req.params.userId = null) {
+    if (req.params.userId == null) {
         res.status(308).send(`User not logged in`)
     } else {
         // insert
