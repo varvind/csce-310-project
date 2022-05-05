@@ -12,12 +12,12 @@ router.post("/create/:user_id", (req, res) => {
     } else {
         // insert
         const {eventId, status} = req.body
-        pool.query("INSERT INTO Event_Followers(user_id, event_id, status) VALUES ($1, $2, $3)", [req.params.user_id, eventId, status],() => {
+        pool.query("INSERT INTO event_followers(user_id, event_id, status) VALUES ($1, $2, $3)", [req.params.user_id, eventId, status], (error, results) => {
             if (error) {
                 console.log(error)
                 res.status(200).send(error)
             } else {
-                //request = result.rows[0]
+                //request = results.rows[0]
                 //res.status(201).send(`Sucessfully created comment from ${request.user_id} in event ${request.event_id}`)
                 res.status(201).send(`Sucessfully created comment`)
             }
@@ -30,7 +30,7 @@ router.post("/create/:user_id", (req, res) => {
  */
 router.get("/get/:user_id", (req, res) => {
     console.log("Get request from:", req.params.user_id)
-    pool.query('SELECT * FROM "adminEvents" INNER JOIN Event_Followers ON "adminEvents".event_id = Event_Followers.event_id WHERE Event_Followers.user_id = $1', [req.params.user_id], (error, result) => {
+    pool.query('SELECT * FROM "adminEvents" INNER JOIN event_followers ON "adminEvents".event_id = event_followers.event_id WHERE event_followers.user_id = $1', [req.params.user_id], (error, result) => {
         if (error) {
             console.log(error)
             res.status(200).send(error)
@@ -50,7 +50,7 @@ router.get("/get/:user_id", (req, res) => {
  */
 router.post("/update/:userId", (req, res) => {
     const {eventId, status} = req.body
-    pool.query("UPDATE Event_Followers SET status = $1 WHERE user_id = $2 AND event_id = $3 RETURNING *", [status, req.params.userId, eventId], (error, results) => {
+    pool.query("UPDATE event_followers SET status = $1 WHERE user_id = $2 AND event_id = $3 RETURNING *", [status, req.params.userId, eventId], (error, results) => {
         if (error) {
             throw error
         }
@@ -64,7 +64,7 @@ router.post("/update/:userId", (req, res) => {
  */
 router.post("/delete/:userId", (req, res) => {
     const {eventId} = req.body
-    pool.query("DELETE FROM Event_Followers WHERE user_id = $1 AND event_id = $2", [req.params.userId, eventId], (error, results) => {
+    pool.query("DELETE FROM event_followers WHERE user_id = $1 AND event_id = $2", [req.params.userId, eventId], (error, results) => {
         if (error) {
             throw error
         }

@@ -14,7 +14,10 @@ var formData = bodyParser.text()
 router.post('/create/:user_id', formData, (req, res) => {
     // Check if anyone is logged in. You should not be able to create a post from a null user.
     const user_id = req.params.user_id;
-    const {event_id, user_comment} = req.body
+    // const {event_id, user_comment} = req.body
+    event_id = req.body.event_id
+    user_comment = req.body.event_id
+
     console.log(`user_id: ${user_id}`)
     console.log(`req.event_id: ${req.body.event_id}`)
     console.log(`req.user_comment: ${req.body.user_comment}`)
