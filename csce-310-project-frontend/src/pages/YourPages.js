@@ -1,10 +1,13 @@
 import Cookies from 'js-cookie';
 import React, { useState, useEffect } from 'react';
+import axios from 'axios'
 
 const  YourPages = () => {
     const [state, setState] = useState({
         pages : []
     });
+    const [pages, setPages] = useState({});
+
     const style = {
         width:"18rem",
         marginTop: "1%",
@@ -142,3 +145,5 @@ const  YourPages = () => {
         </>
     )
 }
+
+export default YourPages
