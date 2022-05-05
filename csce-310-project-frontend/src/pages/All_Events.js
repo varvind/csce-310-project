@@ -2,16 +2,31 @@ import React, {useState, useEffect} from 'react';
 import Cookies from 'js-cookie';
 import axios from 'axios'
 
-const All_Events = ( {event_name} ) => {
+// developed by Joshua Kim
+const All_Events = () => {
+    // initializing states
     const [state, setState] = useState( {
         events: []
     });
-    let user_id = Cookies.get('userId');
+
+    // styling
     const style = {
         width: "18rem",
         marginTop: "1%",
     }
+    const buttonStyle = {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+    }
+    const deleteFormStyle = {
+        marginTop: "1%"
+    }
 
+    // initialize user_id from cookies
+    let user_id = Cookies.get('userId');
+
+    // Function: Get all Events from the specified user
     const getAllEvents = () => {
         let user_id = Cookies.get('userId')
         fetch(`http://localhost:4000/events/get/${user_id}`)
