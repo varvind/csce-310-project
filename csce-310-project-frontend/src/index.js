@@ -16,6 +16,10 @@ import All_Comments from './pages/All_Comments'
 import ChangeComment from './pages/ChangeComment'
 import All_Events from './pages/All_Events'
 import YourPages from './pages/YourPages';
+import AddPage from './pages/AddPage';
+import EditPage from './pages/EditPage';
+import EditEvent from './pages/EditEvent';
+import PageEvents from './pages/PageEvents';
 
 export default function App() {
   return (
@@ -36,6 +40,10 @@ export default function App() {
           <Route path='/allevents' element = {<All_Events/>}/>
           <Route path='/profile/:user_id' element = {<UserProfile/>} />
           <Route path='/yourpages' element = {<YourPages />} />
+          <Route path='/addpage' element = {<AddPage />} />
+          <Route path='/editpage' element = {<EditPage />} />
+          <Route path='/pageevents' element = {<PageEvents />} />
+          <Route path='/editevent' element = {<EditEvent />} />
           <Route path='/page/:page_id' />
         </Route>
       </Routes>

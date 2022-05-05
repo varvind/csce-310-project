@@ -16,7 +16,7 @@ var membersRouter = require('./routes/members');
 var commentsRouter = require('./routes/comments');
 var eventsRouter = require('./routes/events');
 var adminPagesRouter = require('./routes/adminPages');
-var adminEventsRouter = require('./routes/adminevents');
+var adminEventsRouter = require('./routes/adminEvents');
 
 var app = express();
 

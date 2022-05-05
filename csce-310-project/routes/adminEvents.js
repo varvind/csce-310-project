@@ -5,8 +5,8 @@ var router = express.Router();
 // create event
 router.post('/create/:page_id', function(req, res, next) {
     const page_id = req.params.page_id
-    const {title, description, time, location} = req.body
-    pool.query("INSERT INTO events (page_id, title, description, time, location) VALUES ($1, $2, $3, $4, $5) RETURNING *", [page_id, title, description, time, location], (poolerr, poolres) => {
+    const {title, description, location} = req.body
+    pool.query("INSERT INTO events (page_id, title, description, location_stamp) VALUES ($1, $2, $3, $4) RETURNING *", [page_id, title, description, location], (poolerr, poolres) => {
         if(poolerr) {
             console.log(poolerr)
             res.status(400).send("Could not add event")
@@ -15,9 +15,9 @@ router.post('/create/:page_id', function(req, res, next) {
     })
 })
 
-// update page
-router.post('/update/:page_id', (req, res) => {
-    const {title, description, time, location} = req.body
+// update event
+router.post('/update/:event_id', (req, res) => {
+    const {title, description, location} = req.body
     query = 'UPDATE events SET '
     if(title != null && title != "") {
       query += `title = \'${title}\', `
@@ -25,11 +25,8 @@ router.post('/update/:page_id', (req, res) => {
     if(description != null && description != "") {
       query += `description = \'${description}\', `
     }
-    if(time != null && time != "") {
-      query += `time = \'${time}\', `
-    }
     if(location != null && location != "") {
-      query += `location = \'${location}\', `
+      query += `location_stamp = \'${location}\', `
     }
     query = query.substring(0, query.length - 2)
     query += ` where event_id = ${req.params.event_id}`
@@ -43,8 +40,9 @@ router.post('/update/:page_id', (req, res) => {
   
 })
 
-router.delete('/delete', function(req, res, next) {
-    const event_id = req.body.userid
+// delete event
+router.delete('/delete/:event_id', function(req, res, next) {
+    const event_id = req.params.userid
     pool.query("DELETE FROM events WHERE event_id=$1", [event_id], (poolerr, poolres) => {
         if(poolerr) {
             console.log(poolerr)
@@ -54,17 +52,17 @@ router.delete('/delete', function(req, res, next) {
     })
 })
 
-// search event
-router.get('/get/:page_id/:event_id', function(req, res, next){
-    const page_id = req.params.page_id
-    const event_id = req.params.event_id
-    pool.query("SELECT * FROM page WHERE (page_id=$1 AND event_id=$2)", [page_id, event_id], (poolerr, poolres) => {
-        if(poolerr) {
-            console.log(poolerr)
-            res.status(400).send("Page does not exist")
-        }
-        res.json(poolres.rows[0])
-    })
+// get all events from specified page
+router.get('/get/:page_id', function(req, res, next){
+  const page_id = req.params.page_id
+  pool.query("SELECT title, description, location_stamp FROM pages WHERE page_id=$1", [page_id], (poolerr, poolres) => {
+      if(poolerr) {
+          console.log(poolerr)
+          res.status(400).send("Events does not exist")
+      }
+      events = poolres.rows
+      res.status(201).send(events)
+  })
 })
 
 module.exports = router

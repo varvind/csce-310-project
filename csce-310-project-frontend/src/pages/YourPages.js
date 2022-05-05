@@ -1,12 +1,15 @@
 import Cookies from 'js-cookie';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios'
+import { useNavigate } from "react-router-dom";
+
 
 const  YourPages = () => {
     const [state, setState] = useState({
         pages : []
     });
-    const [pages, setPages] = useState({});
+    const [pagesState, setPagesState] = useState({});
+    const navigate = useNavigate();
 
     const style = {
         width:"18rem",
@@ -14,6 +17,7 @@ const  YourPages = () => {
     }
     const adminId = Cookies.get('adminId')
 
+    // get all pages
     const getPages = () => {
         let adminId = Cookies.get('adminId')
         fetch(`http://localhost:4000/pages/get/${adminId}`)
@@ -28,7 +32,7 @@ const  YourPages = () => {
         })
     }
 
-    // Delete Friend Handler
+    // delete page
     const handleDeletePage = async (e) => {
         console.log("deleting page")
         e.preventDefault()
@@ -46,35 +50,6 @@ const  YourPages = () => {
                 window.location.href = '/yourpages'
             }
         })
-    }
-
-    const handleChange = (event) => {
-        const name = event.target.name;
-        const value = event.target.value;
-        setPages(values => ({...values, [name]: value}))
-    }
-
-    const handleSubmit = async (event) => {
-        event.preventDefault();
-
-        let response = await fetch(`http://localhost:4000/pages/create/${adminId}`, {
-            method: 'POST',
-            headers: {'Content-Type':'application/json'},
-            body: JSON.stringify({
-                "description": pages.description,
-                "member_count": pages.member_count,
-                "name": pages.name,
-            })
-        });
-
-        if(response.status === 201) {
-            response.text().then(async (page_id) => {
-                alert("Successfully Created Page")
-                // Cookies.set('page_id', page_id)
-            })
-        } else {
-            alert("Unable to create page")
-        }
     }
 
     // Ensure state change happens only once
@@ -96,7 +71,8 @@ const  YourPages = () => {
                                     <p class = "card-text">{key.description}</p>
                                     <p class = "card-text">Member Count: {key.member_count}</p>
                                     {/* need to figure out how to link to edit page */}
-                                    <a href={"/change/status/" + key.adminId} class="card-link">Edit Page</a>
+                                    <a href={"/editpage" + key.page_id} class="card-link">Edit Page</a>
+                                    <a href={"/pageevents"} class="card-link">Page Events</a>
                                     <form onSubmit={handleDeletePage} style ={{}}>
                                             <input type = "hidden" value = {key.page_id} name = "page_id"/>
                                             <input type="submit" class="btn btn-primary" value = "Delete Page"/>
@@ -107,40 +83,6 @@ const  YourPages = () => {
                     </>
                 )
             })}
-            <h3>Create Page</h3>
-            <form onSubmit={handleSubmit}>
-                <label>Page Name
-                <input 
-                    type="text" 
-                    name="page_name"
-                    class="form-control"
-                    value={pages.name || ""} 
-                    onChange={handleChange}
-                />
-                </label>
-                <br/>
-                <label>Description
-                    <input 
-                    type="text" 
-                    name="description"
-                    class="form-control"
-                    value={pages.description || ""} 
-                    onChange={handleChange}
-                    />
-                </label>
-                <br/>
-                <label>Member Count
-                    <input 
-                    type="text" 
-                    name="member_count"
-                    class="form-control"
-                    value={pages.member_count || ""} 
-                    onChange={handleChange}
-                    />
-                </label>
-                <br/>
-                <input type="submit" class="btn btn-primary" />
-            </form>
             </center>
         </>
     )

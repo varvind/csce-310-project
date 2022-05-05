@@ -59,6 +59,12 @@ const Layout = () => {
                             <li class="nav-item">
                                 <Link class = "nav-link" to='/yourpages'>Your Pages</Link>
                             </li>
+                            <li class="nav-item">
+                                <Link class = "nav-link" to='/addpage'>Add Page</Link>
+                            </li>
+                            {/* <li class="nav-item">
+                                <Link class = "nav-link" to='/editevent'>Edit Event</Link>
+                            </li> */}
                         </>
                     }
                     {   (userId != null) &&

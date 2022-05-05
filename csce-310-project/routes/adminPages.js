@@ -5,7 +5,7 @@ var router = express.Router();
 // creates admin page
 router.post("/create/:admin_id", (req, res, next) => {
     const {description, member_count, name} = req.body
-    pool.query("INSERT INTO pages (admin_id, description, member_count, name) VALUES ($1, $2, $3, $4) RETURNING *", [req.params.admin_id, description, member_count, name], (error, results) => {
+    pool.query("INSERT INTO pages (admin_id, description, member_count, page_name) VALUES ($1, $2, $3, $4) RETURNING *", [req.params.admin_id, description, member_count, name], (error, results) => {
         if (error) {
             console.log(error)
             res.status(400).send("error creating page")
@@ -29,7 +29,7 @@ router.post('/update/:page_id', (req, res) => {
       query += `member_count = \'${member_count}\', `
     }
     if(name != null && name != "") {
-        query += `name = \'${name}\', `
+        query += `page_name = \'${name}\', `
     }
     query = query.substring(0, query.length - 2)
     query += ` where page_id = ${req.params.page_id}`
@@ -58,7 +58,7 @@ router.delete('/delete/:page_id', function(req, res, next) {
 // get all pages from specified admin
 router.get('/get/:admin_id', function(req, res, next){
     const admin_id = req.params.admin_id
-    pool.query("SELECT name, description, member_count FROM pages WHERE admin_id=$1", [admin_id], (poolerr, poolres) => {
+    pool.query("SELECT page_name, description, member_count FROM pages WHERE admin_id=$1", [admin_id], (poolerr, poolres) => {
         if(poolerr) {
             console.log(poolerr)
             res.status(400).send("Page does not exist")
