@@ -8,13 +8,6 @@ const All_Comments = () => {
         comments: []
     });
     
-    const [inputs, setInputs] = useState({});
-    const handleChange = (event) => {
-        const name = event.target.name;
-        const value = event.target.value;
-        setInputs(values => ({...values, [name]: value})) // maybe incorrect
-    }
-
     const style = {
         width: "26rem",
         marginTop: "1%",
@@ -119,12 +112,6 @@ const All_Comments = () => {
                                     <h6 class="font-weight-normal">{key.comments}</h6>
                                     <div style={buttonStyle}>
                                         <a href={"/change/comment/" + key.comment_id} class="card-link"><h6>Edit Comment</h6></a>
-                                        {/*<form onSubmit={handleEditComments} style ={{}}>
-                                            <input type = "hidden" value = {key.comment_id} name = "comment_id"/>
-                                            <input type = "text" defaultValue = {inputs.new_comment_text} onChange={handleChange}/>
-                                            <input type = "submit" class="btn btn-primary" value = "Edit Comment" style={editButtonStyle}/>
-                                        </form>
-                */}
                                         <form onSubmit={handleDeleteComments} style={deleteFormStyle}>
                                             <input type = "hidden" value = {key.comment_id} name = "comment_id"/>
                                             <input type = "submit" class="btn btn-primary" value = "Delete Comment"/>
