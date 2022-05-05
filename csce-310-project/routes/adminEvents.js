@@ -6,19 +6,19 @@ var router = express.Router();
 router.post('/create/:page_id', function(req, res, next) {
     const page_id = req.params.page_id
     const {title, description, location} = req.body
-    pool.query("INSERT INTO events (page_id, title, description, location_stamp) VALUES ($1, $2, $3, $4) RETURNING *", [page_id, title, description, location], (poolerr, poolres) => {
+    pool.query("INSERT INTO adminEvents (page_id, title, description, location_stamp) VALUES ($1, $2, $3, $4) RETURNING *", [page_id, title, description, location], (poolerr, poolres) => {
         if(poolerr) {
             console.log(poolerr)
             res.status(400).send("Could not add event")
         }
-        res.json(poolres.rows[0])
+        res.status(201).send(`${poolres.rows[0]}`)
     })
 })
 
 // update event
 router.post('/update/:event_id', (req, res) => {
     const {title, description, location} = req.body
-    query = 'UPDATE events SET '
+    query = 'UPDATE adminEvents SET '
     if(title != null && title != "") {
       query += `title = \'${title}\', `
     }
@@ -43,7 +43,7 @@ router.post('/update/:event_id', (req, res) => {
 // delete event
 router.delete('/delete/:event_id', function(req, res, next) {
     const event_id = req.params.userid
-    pool.query("DELETE FROM events WHERE event_id=$1", [event_id], (poolerr, poolres) => {
+    pool.query("DELETE FROM adminEvents WHERE event_id=$1", [event_id], (poolerr, poolres) => {
         if(poolerr) {
             console.log(poolerr)
             res.status(400).send("Could not delete event")
@@ -55,7 +55,7 @@ router.delete('/delete/:event_id', function(req, res, next) {
 // get all events from specified page
 router.get('/get/:page_id', function(req, res, next){
   const page_id = req.params.page_id
-  pool.query("SELECT title, description, location_stamp FROM pages WHERE page_id=$1", [page_id], (poolerr, poolres) => {
+  pool.query("SELECT title, description, location_stamp, event_id FROM adminEvents WHERE page_id=$1", [page_id], (poolerr, poolres) => {
       if(poolerr) {
           console.log(poolerr)
           res.status(400).send("Events does not exist")

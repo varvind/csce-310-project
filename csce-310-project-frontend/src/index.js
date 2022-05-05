@@ -41,9 +41,9 @@ export default function App() {
           <Route path='/profile/:user_id' element = {<UserProfile/>} />
           <Route path='/yourpages' element = {<YourPages />} />
           <Route path='/addpage' element = {<AddPage />} />
-          <Route path='/editpage' element = {<EditPage />} />
+          <Route path='/editpage/:page_id' element = {<EditPage />} />
           <Route path='/pageevents' element = {<PageEvents />} />
-          <Route path='/editevent' element = {<EditEvent />} />
+          <Route path='/editevent/:page_id' element = {<EditEvent />} />
           <Route path='/page/:page_id' />
         </Route>
       </Routes>

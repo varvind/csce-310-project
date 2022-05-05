@@ -1,4 +1,5 @@
 // edited by the best coder in the team: Jakob Evangelista
+const { query } = require('express');
 var express = require('express');
 var router = express.Router();
 
@@ -13,28 +14,29 @@ router.post("/create/:admin_id", (req, res, next) => {
         }
         // request = result.rows[0]
         // res.status(201).send(`Sucessfully created page for ${result.admin_id} with description ${result.description}`)
-        res.status(201).send(`${results.rows[0].page_id}`)
+        res.status(201).send(`${results.rows[0]}`)
         
     })
 })
 
 // update page
 router.post('/update/:page_id', (req, res) => {
-    const {description, member_count, name} = req.body
-    query = 'UPDATE pages SET '
+    const {name, description, member_count} = req.body
+    query1 = 'UPDATE pages SET '
     if(description != null && description != "") {
-        query += `description = \'${description}\', `
+        query1 += `description = \'${description}\', `
     }
     if(member_count != null && member_count != "") {
-      query += `member_count = \'${member_count}\', `
+      query1 += `member_count = \'${member_count}\', `
     }
     if(name != null && name != "") {
-        query += `page_name = \'${name}\', `
+        query1 += `page_name = \'${name}\', `
     }
-    query = query.substring(0, query.length - 2)
-    query += ` where page_id = ${req.params.page_id}`
-    console.log(query)
-    pool.query(query, (error, result) => {
+    query1 = query1.substring(0, query1.length - 2)
+    // console.log(query)
+    query1 += ` where page_id = ${req.params.page_id}`
+    console.log(req.params.page_id)
+    pool.query(query1, (error, result) => {
       if(error) {
         console.log(error)
       }
@@ -58,7 +60,7 @@ router.delete('/delete/:page_id', function(req, res, next) {
 // get all pages from specified admin
 router.get('/get/:admin_id', function(req, res, next){
     const admin_id = req.params.admin_id
-    pool.query("SELECT page_name, description, member_count FROM pages WHERE admin_id=$1", [admin_id], (poolerr, poolres) => {
+    pool.query("SELECT page_name, description, member_count, page_id FROM pages WHERE admin_id=$1", [admin_id], (poolerr, poolres) => {
         if(poolerr) {
             console.log(poolerr)
             res.status(400).send("Page does not exist")

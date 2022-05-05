@@ -12,13 +12,13 @@ router.post("/create/:userId", (req, res, next) => {
     } else {
         // insert
         const {eventId, status} = req.body
-        pool.query("INSERT INTO Event_Followers(user_id, event_id, status) VALUES ($1, $2, $3)", [req.params.userId, eventId, status],() => {
+        pool.query("INSERT INTO Event_Followers(user_id, event_id, status) VALUES ($1, $2, $3)", [req.params.userId, eventId, status],(error, results) => {
             if (error) {
                 throw error
             }
 
             request = result.row[0]
-            res.status(201).send(`User has successfully added event ${request.event_id} to his list as status of ${request.status}`)
+            res.status(201).send(`User has successfully added event ${request.event_id} to his list as status of ${results.status}`)
         })
     }  
 })

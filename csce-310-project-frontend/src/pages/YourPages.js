@@ -23,10 +23,14 @@ const  YourPages = () => {
         fetch(`http://localhost:4000/pages/get/${adminId}`)
         .then((response) => response.json())
         .then((responseJson) => {
-            var pages = []
+            var pagesList = []
             responseJson.forEach(element => {
-                pages.push(element)
+                pagesList.push(element)
             });
+
+            setState({
+                pages : pagesList
+            })
         }).catch((error) => {
             console.error(error)
         })
@@ -71,8 +75,8 @@ const  YourPages = () => {
                                     <p class = "card-text">{key.description}</p>
                                     <p class = "card-text">Member Count: {key.member_count}</p>
                                     {/* need to figure out how to link to edit page */}
-                                    <a href={"/editpage" + key.page_id} class="card-link">Edit Page</a>
-                                    <a href={"/pageevents"} class="card-link">Page Events</a>
+                                    <a href={"/editpage/" + key.page_id} class="card-link">Edit Page</a>
+                                    <a href={"/pageevents/" + key.page_id} class="card-link">Page Events</a>
                                     <form onSubmit={handleDeletePage} style ={{}}>
                                             <input type = "hidden" value = {key.page_id} name = "page_id"/>
                                             <input type="submit" class="btn btn-primary" value = "Delete Page"/>
