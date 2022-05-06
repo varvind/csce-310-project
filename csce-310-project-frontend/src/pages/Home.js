@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import Cookies from 'js-cookie';
 
+// Developed by Joshua Kim
 const Home = () => {
     // initialize states
     const [state, setState] = useState( {
@@ -16,6 +17,7 @@ const Home = () => {
     // initialize variables
     const user_id = Cookies.get('userId');
 
+    // Function: run the moment the page loads. Loads all Events
     const getAllEvents = () => {
         fetch(`http://localhost:4000/adminEvents/get/all/pages/events`)
         .then((response) => response.json())
@@ -33,6 +35,7 @@ const Home = () => {
         })
     }
 
+    // Function: Handles event where user clicks the follow button
     const addEvent = async (e) => {
         e.preventDefault();
         const inputs = Object.values(e.target)
@@ -48,6 +51,7 @@ const Home = () => {
             })
         })
 
+        // Redirection to homepage
         if (response.status === 201) {
             alert('Successfully followed event')
             window.location.href = '/'
@@ -64,6 +68,7 @@ const Home = () => {
     return (
         <>
             <center>
+                {/* If user is not logged in, just show events and details */}
                 { (user_id == null) &&
                     <>
                     <h1><u>Upcoming Events</u></h1>
@@ -83,6 +88,7 @@ const Home = () => {
                     })}
                     </>
                 }
+                {/* If user is logged in, show follow and edit buttons */}
                 { (user_id != null) &&
                     <>
                         <h1><u>Upcoming Events</u></h1>
@@ -95,7 +101,9 @@ const Home = () => {
                                                 <h5 class="card-title"><u>{key.title}</u></h5>
                                                 <h6 class="font-weight-normal">{key.description}</h6>
                                                 <div>
+                                                    {/* Handles event where user wants to create a comment. Takes to separate page */}
                                                     <a href={"/event/comments/" + key.event_id} class="card-link"><h6>Edit Comment</h6></a>
+                                                    {/* Handles event where user wants to follow an event */}
                                                     <form onSubmit={addEvent}>
                                                         <input type="hidden" value={key.event_id} name="event_id"/>
                                                         <input type="submit" class="btn btn-primary" value="Follow Event"/>
