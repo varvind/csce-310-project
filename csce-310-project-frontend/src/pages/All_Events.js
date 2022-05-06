@@ -46,6 +46,7 @@ const All_Events = () => {
         })
     }
 
+    // handles when delete is pressed
     const handleDeleteEvent = async (e) => {
         console.log("Deleting Event")
         e.preventDefault()
