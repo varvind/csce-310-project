@@ -37,7 +37,7 @@ const Login = () => {
                     headers: {'Content-Type': 'application/json'},
                 })
                 console.log(adminResponse)
-                if(adminResponse.status === 200) {
+                if(adminResponse.status === 200) { //If user is an admin set cookies
                     adminResponse.json().then(adminJson => {
                         console.log(adminJson);
                         const adminId = adminJson.admin_id

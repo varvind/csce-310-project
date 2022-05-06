@@ -28,7 +28,7 @@ const  AddPage = () => {
             headers: {'Content-Type':'application/json'},
             body: JSON.stringify({
                 "description": pagesState.description,
-                "member_count": 0,
+                "member_count": 1,
                 "name": pagesState.name
             })
         });

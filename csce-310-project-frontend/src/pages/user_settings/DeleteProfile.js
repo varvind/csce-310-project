@@ -12,22 +12,6 @@ const DeleteProfile = () => {
     // Submit Event Handler
     const handleSubmit = async (event) => {
         event.preventDefault();
-        
-        if(admin_id != null) {
-            let adminResponse = await fetch(`http://localhost:4000/admin/delete/${admin_id}`, {
-                method: 'DELETE',
-                headers: {'Content-Type':'application/json'},
-            });
-            if(adminResponse.status === 200) {
-                alert("Admin Deleted")
-            }
-            else {
-                alert("Error when attempting to delete admin")
-            }
-
-            Cookies.remove('adminId')
-        }
-
         let response = await fetch(`http://localhost:4000/user/delete/${user_id}`, {
             method: 'DELETE',
             headers: {'Content-Type':'application/json'},
@@ -35,6 +19,7 @@ const DeleteProfile = () => {
 
         if(response.status === 200) {
             Cookies.remove('userId')
+            Cookies.remove('adminId')
             alert("Profile Deleted")
 
             window.location.href='/'
