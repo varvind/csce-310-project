@@ -24,7 +24,7 @@ const EditPage = () => {
         setInputs(values => ({...values, [name]: value}))
     }
 
-    const searchAdmins = async (event) => {
+    const searchAdmins = async (event) => { //Backend request to search for admin users to add as members
         const search = event.target.value
         if(search === "") {
             setAdmins([])
@@ -35,7 +35,7 @@ const EditPage = () => {
         setAdmins(json)
     }
 
-    const addMember = async (event) => {
+    const addMember = async (event) => { //Add admin member using backend request
         const admin_id = event.target.value
         let response = await fetch(`http://localhost:4000/members/add`, {
             method: 'POST',
@@ -48,7 +48,7 @@ const EditPage = () => {
         getMembers();
     }
 
-    const deleteMember = async (event) => {
+    const deleteMember = async (event) => { //Delete admin member using backend request
         const admin_id = event.target.value
         let response = await fetch(`http://localhost:4000/members/delete`, {
             method: 'DELETE',
@@ -61,7 +61,7 @@ const EditPage = () => {
         getMembers();
     }
 
-    const getMembers = async () => {
+    const getMembers = async () => { //Get all current admin members
         let response = await fetch(`http://localhost:4000/members/get/${page_id}`);
         const json = await response.json();
         setMembers(json);
