@@ -58,6 +58,7 @@ const EventComments = () => {
         })
     }
 
+    // Functionality: User can post a comment to an event
     const addComment = async(e) => {
         console.log("Posting a comment")
         e.preventDefault()
@@ -86,6 +87,7 @@ const EventComments = () => {
         }
     }
 
+    // run on load
     useEffect(() => {
         getComments()
     }, [])

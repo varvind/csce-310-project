@@ -1,15 +1,14 @@
-// Joshua Kim
 var express = require('express');
 var bodyParser = require('body-parser')
 var router = express.Router();
 var formData = bodyParser.text()
 
+// Code developed by Joshua Kim
 
 /*
  *   Functionality: Creating a new post and storing it in the database
  */
 router.post('/create/:user_id', formData, (req, res) => {
-    // Check if anyone is logged in. You should not be able to create a post from a null user.
     const user_id = req.params.user_id;
     // const {event_id, user_comment} = req.body
     event_id = req.body.event_id
@@ -32,7 +31,6 @@ router.post('/create/:user_id', formData, (req, res) => {
  *   Functionality: Pull all comments from a user.
  */
 router.get('/get/:user_id', (req, res, next) => {
-    // Check if anyone is logged in.
     // Pull comments and user info from database where userid of a row = the userid from the url
     const user_id = req.params.user_id
     console.log(user_id)
@@ -56,7 +54,6 @@ router.get('/get/:user_id', (req, res, next) => {
  *   Functionality: Pull all comments from an event_id.
  */
 router.get('/get/from/event/:event_id', (req, res, next) => {
-    // Check if anyone is logged in.
     // Pull comments and user info from database where userid of a row = the userid from the url
     const event_id = req.params.event_id
     console.log("event_id", event_id)

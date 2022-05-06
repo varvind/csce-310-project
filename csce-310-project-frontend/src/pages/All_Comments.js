@@ -8,6 +8,7 @@ const All_Comments = () => {
         comments: []
     });
     
+    // Stylings for different parts
     const style = {
         width: "26rem",
         marginTop: "1%",
@@ -17,11 +18,11 @@ const All_Comments = () => {
         flexDirection: 'row',
         justifyContent: 'space-between'
     }
-
     const deleteFormStyle = {
         marginTop: "1%"
     }
     
+    // grab user_id from Cookies
     let user_id = Cookies.get('userId');
 
     // Get All Comments for the User
@@ -30,6 +31,7 @@ const All_Comments = () => {
         fetch(`http://localhost:4000/comments/get/${user_id}`)
         .then((response) => response.json())
         .then((responseJson) => {
+            // store it in an array and set the state
             var commentList = []
             responseJson.forEach(element => {
                 commentList.push(element)
@@ -46,6 +48,8 @@ const All_Comments = () => {
     const handleDeleteComments = async (e) => {
         console.log("Deleting Comment")
         e.preventDefault()
+
+        // grabs input vals
         const inputs = Object.values(e.target)
         .filter(c => typeof c.tagName === 'string' && c.tagName.toLowerCase() === 'input')
         .reduce((acc, curr) => ({ ...acc, [curr.name]: curr.value }), {});
@@ -62,10 +66,12 @@ const All_Comments = () => {
         })
     }
 
+    // Function run when page is loaded
     useEffect(() => {
         getComments()
     }, [])
 
+    // JSX element
     return (
         <>
         <center>

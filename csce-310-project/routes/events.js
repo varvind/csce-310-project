@@ -1,12 +1,12 @@
-// Joshua Kim
 var express = require('express');
 var router = express.Router();
+
+// Developed by Joshua Kim
 
 /*
  *  Functionality: Add event to user's list
  */
 router.post("/create/:user_id", (req, res) => {
-    // insert
     const event_id = req.body.event_id
     
     pool.query("INSERT INTO event_followers(user_id, event_id) VALUES ($1, $2)", [req.params.user_id, event_id], (error, results) => {
@@ -14,14 +14,8 @@ router.post("/create/:user_id", (req, res) => {
             console.log(error)
             res.status(200).send(error)
         } else {
-            //request = results.rows[0]
-            //res.status(201).send(`Sucessfully created comment from ${request.user_id} in event ${request.event_id}`)
             res.status(201).send(`Sucessfully created comment`)
         }
-        /*
-        request = result.row[0]
-        res.status(201).send(`User has successfully added event ${request.event_id} to his list as status of ${results.status}`)
-        */
     })
 })
 
@@ -82,7 +76,7 @@ router.get('/get/specific/status/:event_id', (req, res) => {
 
 
 /*
- *  Functionality: Update the status of the event ("Going" or "Maybe")
+ *  Functionality: Update the status of the event ("Going" or "Maybe or Null")
  */
 router.post("/update/:user_id/:event_id", (req, res) => {
     const user_id = req.params.user_id
@@ -109,8 +103,6 @@ router.delete("/delete/:user_id/:event_id", (req, res) => {
             console.log(error)
             res.status(500).send(error)
         } else {
-            // send deleted event to console for testing
-            // request = results.row[0]
             res.status(200).send(`Successfully deleted the event`)
         } 
     })

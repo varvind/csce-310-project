@@ -4,13 +4,14 @@ import Cookies from 'js-cookie';
 
 // Developed by Joshua Kim
 const changeEventStatus = () => {
-    // store the various required states and intilize necessary variables
+    // store the various required states for different components and intilize necessary variables
     let [eventName, setEventName] = useState("");
     let [status, setStatus] = useState("")
     let [new_status, setNewStatus] = useState("")
     let { event_id } = useParams();
     let user_id = Cookies.get('userId');
 
+    // runs upon load. Gets the status of the event. 
     const getEventStatus = () => {
         fetch(`http://localhost:4000/events/get/specific/status/${event_id}`)
         .then((response) => response.json())
@@ -21,6 +22,7 @@ const changeEventStatus = () => {
         })
     }
 
+    // runs upon load. Gets the events title
     const getEventName = () => {
         console.log(event_id)
         fetch(`http://localhost:4000/events/get/specific/name/${event_id}`)
@@ -34,6 +36,7 @@ const changeEventStatus = () => {
         })
     }
 
+    // Grabs value in textbox and saves to new_status state
     const handleChange = (event) => {
         const value = event.target.value;
         setNewStatus(value)
