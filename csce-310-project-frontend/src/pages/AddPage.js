@@ -22,14 +22,13 @@ const  AddPage = () => {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        let admin_id = Cookies.get("adminId")
 
         let response = await fetch(`http://localhost:4000/pages/create/${adminId}`, {
             method: 'POST',
             headers: {'Content-Type':'application/json'},
             body: JSON.stringify({
                 "description": pagesState.description,
-                "member_count": pagesState.member_count,
+                "member_count": 0,
                 "name": pagesState.name
             })
         });
@@ -65,16 +64,6 @@ const  AddPage = () => {
                     name="description"
                     class="form-control"
                     value={pagesState.description || ""} 
-                    onChange={handleChange}
-                    />
-                </label>
-                <br/>
-                <label>Member Count
-                    <input 
-                    type="text" 
-                    name="member_count"
-                    class="form-control"
-                    value={pagesState.member_count || ""} 
                     onChange={handleChange}
                     />
                 </label>
