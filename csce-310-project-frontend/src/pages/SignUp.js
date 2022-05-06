@@ -37,7 +37,7 @@ const SignUp = () => {
                 alert("Successfully Created User")
                 Cookies.set('userId', userId)
 
-                if(inputs.adminChecked) {
+                if(inputs.adminChecked) { //If admin do backend request
                     let adminResponse = await fetch('http://localhost:4000/admin/create', {
                         method: 'POST',
                         headers: {'Content-Type': 'application/json'},
@@ -46,7 +46,7 @@ const SignUp = () => {
                         })
                     })
 
-                    if(adminResponse.status === 200) {
+                    if(adminResponse.status === 200) { //If request successful alert and set cookies
                         adminResponse.json().then(adminJson => {
                             const adminId = adminJson.admin_id;
                             alert("Successfully Created Admin")
@@ -54,7 +54,7 @@ const SignUp = () => {
                             window.location.href = '/'
                         })
                     }
-                    else {
+                    else { //Else alert failure
                         alert("Unable to create admin")
                         navigate('/signup')
                     }
