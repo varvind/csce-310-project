@@ -70,4 +70,16 @@ router.get('/get/:page_id', function(req, res, next){
   })
 })
 
+router.get('/get/all/pages/events', function(req, res) {
+  pool.query("SELECT * FROM admin_events", (error, result) => {
+    if (error) {
+      console.log(error)
+      res.status(400).send("Events does not exist")
+      next(error)
+    }
+    events = result.rows
+    res.status(201).send(events)
+  })
+})
+
 module.exports = router
