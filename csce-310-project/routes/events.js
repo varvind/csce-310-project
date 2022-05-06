@@ -6,28 +6,23 @@ var router = express.Router();
  *  Functionality: Add event to user's list
  */
 router.post("/create/:user_id", (req, res) => {
-    if (req.params.user_id == null) {
-        res.status(308).send(`User not logged in`)
-    } else {
-        // insert
-        const event_id = req.body.event_id
-        const status = req.body.status
-        
-        pool.query("INSERT INTO event_followers(user_id, event_id, status) VALUES ($1, $2, $3)", [req.params.user_id, event_id, status], (error, results) => {
-            if (error) {
-                console.log(error)
-                res.status(200).send(error)
-            } else {
-                //request = results.rows[0]
-                //res.status(201).send(`Sucessfully created comment from ${request.user_id} in event ${request.event_id}`)
-                res.status(201).send(`Sucessfully created comment`)
-            }
-            /*
-            request = result.row[0]
-            res.status(201).send(`User has successfully added event ${request.event_id} to his list as status of ${results.status}`)
-            */
-        })
-    }  
+    // insert
+    const event_id = req.body.event_id
+    
+    pool.query("INSERT INTO event_followers(user_id, event_id) VALUES ($1, $2)", [req.params.user_id, event_id], (error, results) => {
+        if (error) {
+            console.log(error)
+            res.status(200).send(error)
+        } else {
+            //request = results.rows[0]
+            //res.status(201).send(`Sucessfully created comment from ${request.user_id} in event ${request.event_id}`)
+            res.status(201).send(`Sucessfully created comment`)
+        }
+        /*
+        request = result.row[0]
+        res.status(201).send(`User has successfully added event ${request.event_id} to his list as status of ${results.status}`)
+        */
+    })
 })
 
 /*

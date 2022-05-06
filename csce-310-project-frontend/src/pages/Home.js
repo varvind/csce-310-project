@@ -15,7 +15,6 @@ const Home = () => {
 
     // initialize variables
     const user_id = Cookies.get('userId');
-    console.log(user_id)
 
     const getAllEvents = () => {
         fetch(`http://localhost:4000/adminEvents/get/all/pages/events`)
@@ -35,7 +34,27 @@ const Home = () => {
     }
 
     const addEvent = async (e) => {
+        e.preventDefault();
+        const inputs = Object.values(e.target)
+        .filter(c => typeof c.tagName === 'string' && c.tagName.toLowerCase() === 'input')
+        .reduce((acc, curr) => ({ ...acc, [curr.name]: curr.value }), {});
+        const event_id = inputs.event_id
 
+        let response = await fetch(`http://localhost:4000/events/create/${user_id}`, {
+            method: 'POST',
+            headers: {'Content-Type':'application/json'},
+            body: JSON.stringify({
+                "event_id": event_id
+            })
+        })
+
+        if (response.status === 201) {
+            alert('Successfully followed event')
+            window.location.href = '/'
+        } else {
+            alert('Error or Duplicate event')
+            window.location.href = '/'
+        }
     }
 
     useEffect(() => {
@@ -76,9 +95,10 @@ const Home = () => {
                                                 <h5 class="card-title"><u>{key.title}</u></h5>
                                                 <h6 class="font-weight-normal">{key.description}</h6>
                                                 <div>
+                                                    <a href={"/event/comments/" + key.event_id} class="card-link"><h6>Edit Comment</h6></a>
                                                     <form onSubmit={addEvent}>
                                                         <input type="hidden" value={key.event_id} name="event_id"/>
-                                                        <input type="submit" class="btn btn-primary" value="Add Event"/>
+                                                        <input type="submit" class="btn btn-primary" value="Follow Event"/>
                                                     </form>
                                                 </div>
                                             </div>

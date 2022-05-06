@@ -21,6 +21,7 @@ import AddPage from './pages/AddPage';
 import EditPage from './pages/EditPage';
 import EditEvent from './pages/EditEvent';
 import PageEvents from './pages/PageEvents';
+import EventComments from './pages/EventComments'
 
 export default function App() {
   return (
@@ -47,6 +48,7 @@ export default function App() {
           <Route path='/pageevents/:page_id' element = {<PageEvents />} />
           <Route path='/editevent/:event_id' element = {<EditEvent />} />
           <Route path='/page/:page_id' />
+          <Route path='/event/comments/:event_id' element = {<EventComments/>}/>
         </Route>
       </Routes>
     </BrowserRouter>
