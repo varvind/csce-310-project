@@ -102,7 +102,7 @@ const Home = () => {
                                                 <h6 class="font-weight-normal">{key.description}</h6>
                                                 <div>
                                                     {/* Handles event where user wants to create a comment. Takes to separate page */}
-                                                    <a href={"/event/comments/" + key.event_id} class="card-link"><h6>Edit Comment</h6></a>
+                                                    <a href={"/event/comments/" + key.event_id} class="card-link"><h6>Post Comment</h6></a>
                                                     {/* Handles event where user wants to follow an event */}
                                                     <form onSubmit={addEvent}>
                                                         <input type="hidden" value={key.event_id} name="event_id"/>

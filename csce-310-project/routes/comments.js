@@ -13,28 +13,19 @@ router.post('/create/:user_id', formData, (req, res) => {
     const user_id = req.params.user_id;
     // const {event_id, user_comment} = req.body
     event_id = req.body.event_id
-    user_comment = req.body.event_id
+    user_comment = req.body.new_comment
 
-    console.log(`user_id: ${user_id}`)
-    console.log(`req.event_id: ${req.body.event_id}`)
-    console.log(`req.user_comment: ${req.body.user_comment}`)
-    console.log(`req.body: ${req.body}`)
-    if (user_id == null) {
-        res.status(308).send(`Error user not logged in`)
-    } else {
-        // Insert into database
-        console.log(user_id, event_id, user_comment)
-        pool.query("INSERT INTO event_comments (user_id, event_id, comments) VALUES ($1, $2, $3) RETURNING *", [user_id, event_id, user_comment], (error, results) => {
-            if (error) {
-                console.log(error)
-                res.status(200).send(error)
-            } else {
-                //request = result.rows[0]
-                //res.status(201).send(`Sucessfully created comment from ${request.user_id} in event ${request.event_id}`)
-                res.status(201).send(`Sucessfully created comment`)
-            }
-        })
-    }
+    // Insert into database
+    pool.query("INSERT INTO event_comments (user_id, event_id, comments) VALUES ($1, $2, $3) RETURNING *", [user_id, event_id, user_comment], (error, results) => {
+        if (error) {
+            console.log(error)
+            res.status(200).send(error)
+        } else {
+            //request = result.rows[0]
+            //res.status(201).send(`Sucessfully created comment from ${request.user_id} in event ${request.event_id}`)
+            res.status(201).send(`Sucessfully created comment`)
+        }
+    })
 })
 
 /*
@@ -68,7 +59,7 @@ router.get('/get/from/event/:event_id', (req, res, next) => {
     // Check if anyone is logged in.
     // Pull comments and user info from database where userid of a row = the userid from the url
     const event_id = req.params.event_id
-    console.log(event_id)
+    console.log("event_id", event_id)
     pool.query('SELECT event_comments.user_id, event_comments.comment_id, event_comments.event_id, event_comments.comments, users.username, admin_events.title FROM event_comments INNER JOIN users ON event_comments.user_id = users.user_id INNER JOIN admin_events ON event_comments.event_id = admin_events.event_id WHERE event_comments.event_id = $1', [event_id], (error, result) => {
         if (error) {
             console.log(error)
@@ -105,16 +96,14 @@ router.get('/get/specific/:comment_id', (req, res) => {
  *  Functionality: Allow editing any user comments
  */
 router.post('/update/:userId', (req, res) => {
-    const {comment_id, new_comment} = req.body
-    console.log(`comment_id: ${comment_id}, new_comment: ${new_comment}`)
-    pool.query("UPDATE event_comments SET comments = $1 WHERE user_id = $2 AND comment_id = $3 RETURNING *", [new_comment, req.params.userId, comment_id],(error, results) => {
+    const {comment_id, user_comment} = req.body
+    console.log(`comment_id: ${comment_id}, new_comment: ${user_comment}`)
+    pool.query("UPDATE event_comments SET comments = $1 WHERE user_id = $2 AND comment_id = $3 RETURNING *", [user_comment, req.params.userId, comment_id],(error, results) => {
         if (error) {
             console.log(error)
             res.status(200).send(error)
         } else {
-            // request = results.row
-            // res.status(200).send(`${old_comment} updated to ${request.comments}`)
-            res.status(200).send(`Updated comment`)
+            res.status(201).send(`Updated comment`)
         }   
     })
 })

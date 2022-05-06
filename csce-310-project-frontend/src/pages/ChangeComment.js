@@ -5,7 +5,7 @@ import Cookies from 'js-cookie';
 // Developed by Joshua Kim
 const changeComments = () => {
     // store the various required states and intilize necessary variables
-    const [inputs, setInputs] = useState({});
+    const [editInputs, seteditInputs] = useState({});
     const [comment, setComment] = useState("");
     let user_id = Cookies.get('userId');
     let { comment_id } = useParams();
@@ -14,7 +14,7 @@ const changeComments = () => {
     const handleChange = (event) => {
         const name = event.target.name;
         const value = event.target.value;
-        setInputs(values => ({...values, [name]: value}))
+        seteditInputs(values => ({...values, [name]: value}))
     }
 
     // Form Submit Handler: handles the event when the user presses the submit button
@@ -25,7 +25,7 @@ const changeComments = () => {
         e.preventDefault()
         
         // text retrieved from form
-        const new_comment_text = inputs.new_comment_text
+        const new_comment_text = editInputs.comments
         
         // updates the comment and passes the parameters
         //      params: user_id
@@ -35,12 +35,12 @@ const changeComments = () => {
             headers: {'Content-Type':'application/json'},
             body: JSON.stringify({
                 "comment_id": comment_id,
-                "new_comment": new_comment_text
+                "user_comment": new_comment_text
             })
         });
         
         // display success or failure and send back to the My comments page
-        if (response.status === 200) {
+        if (response.status === 201) {
             response.text().then(async (comment_id) => {
                 alert("Successfully updated comment")
                 window.location.href = '/allcomments'
@@ -86,9 +86,9 @@ const changeComments = () => {
                 <label>New Comment
                 <input 
                     type="text" 
-                    name="new_comment_text"
+                    name="comments"
                     class="form-control" 
-                    value={inputs.new_comment_text || ""} 
+                    value={editInputs.comments || ""} 
                     onChange={handleChange}
                 />
                 </label>
