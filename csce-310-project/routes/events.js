@@ -46,9 +46,26 @@ router.get("/get/:user_id", (req, res) => {
 })
 
 /*
- *  Functionality: Get a specific event
+ *  Functionality: Get a specific event name
  */
-router.get('/get/specific/:event_id', (req, res) => {
+router.get('/get/specific/name/:event_id', (req, res) => {
+    console.log(`get/specific/name/:${req.params.event_id}`)
+    pool.query('SELECT title FROM admin_events WHERE event_id = $1', [req.params.event_id], (error, results) => {
+        if (error) {
+            console.log(error)
+            res.status(200).send(error)
+        } else {
+            eventName = []
+            eventName = results.rows[0]
+            res.status(200).send(eventName)
+        }
+    })
+})
+
+/*
+ *  Functionality: Get a specific event status
+ */
+router.get('/get/specific/name/:event_id', (req, res) => {
     pool.query('SELECT admin_events.title, event_followers.status INNER JOIN event_followers on admin_events.event_id = event_followers.event_id WHERE event_id = $1', [req.params.event_id], (error, results) => {
         if (error) {
             console.log(error)
@@ -60,6 +77,7 @@ router.get('/get/specific/:event_id', (req, res) => {
         }
     })
 })
+
 
 /*
  *  Functionality: Update the status of the event ("Going" or "Maybe")
