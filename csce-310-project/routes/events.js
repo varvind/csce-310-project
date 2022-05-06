@@ -7,7 +7,7 @@ var router = express.Router();
  *  Functionality: Add event to user's list
  */
 router.post("/create/:userId", (req, res, next) => {
-    if (req.params.userId = null) {
+    if (req.params.userId == null) {
         res.status(308).send(`User not logged in`)
     } else {
         // insert
@@ -27,7 +27,7 @@ router.post("/create/:userId", (req, res, next) => {
  *  Functionality: Grab all events the user has marked/followed
  */
 router.get("/query/:userId", (req, res) => {
-    pool.query("SELECT * FROM Events INNER JOIN Event_Followers ON Events.event_id = Event_Followers.event_id WHERE Event_Followers.user_id = $1", [req.params.userId], (error, results) => {
+    pool.query('SELECT * FROM "adminEvents" INNER JOIN Event_Followers ON "adminEvents".event_id = Event_Followers.event_id WHERE Event_Followers.user_id = $1', [req.params.userId], (error, results) => {
         if (error) {
             throw error
         }

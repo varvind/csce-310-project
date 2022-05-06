@@ -45,7 +45,7 @@ router.get('/get/:user_id', (req, res, next) => {
     // Pull comments and user info from database where userid of a row = the userid from the url
     const user_id = req.params.user_id
     console.log(user_id)
-    pool.query("SELECT event_comments.user_id, event_comments.comment_id, event_comments.event_id, event_comments.comments, users.username, events.title FROM event_comments INNER JOIN users ON event_comments.user_id = users.user_id INNER JOIN events ON event_comments.event_id = events.event_id WHERE event_comments.user_id = $1", [req.params.user_id], (error, result) => {
+    pool.query('SELECT event_comments.user_id, event_comments.comment_id, event_comments.event_id, event_comments.comments, users.username, "adminEvents".title FROM event_comments INNER JOIN users ON event_comments.user_id = users.user_id INNER JOIN "adminEvents" ON event_comments.event_id = "adminEvents".event_id WHERE event_comments.user_id = $1', [req.params.user_id], (error, result) => {
         if (error) {
             console.log(error)
             res.status(200).send(error)
@@ -65,13 +65,14 @@ router.get('/get/:user_id', (req, res, next) => {
  *  Functionality: Pull specific comment
  */
 router.get('/get/specific/:comment_id', (req, res) => {
-    pool.query("SELECT * FROM Event_Comments WHERE comment_id = $1", [req.params.comment_id], (error, results) => {
+    pool.query("SELECT comments FROM Event_Comments WHERE comment_id = $1", [req.params.comment_id], (error, results) => {
         if (error) {
             console.log(error)
             res.status(200).send(error)
         } else {
-            // request = results.rows
-            res.status(200).send(`Pulled comment`)
+            request = []
+            request = results.rows[0]
+            res.status(200).send(request)
         }
     })
 })
