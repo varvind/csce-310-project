@@ -92,10 +92,9 @@ router.delete('/delete/:user_id', function(req, res, next) {
 
   pool.query("Delete from users where user_id = $1", [req.params.user_id], (error, result) => {
     if(error) {
-      console.log("In delete user", error)
+      res.status(400).send("Error Deleting User")
       next(error)
     }
-    console.log("user deleted")
     res.status(200).send('User successfully deleted')
   })
 });

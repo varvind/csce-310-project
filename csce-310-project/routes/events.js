@@ -11,8 +11,10 @@ router.post("/create/:user_id", (req, res) => {
         res.status(308).send(`User not logged in`)
     } else {
         // insert
-        const {eventId, status} = req.body
-        pool.query("INSERT INTO event_followers(user_id, event_id, status) VALUES ($1, $2, $3)", [req.params.user_id, eventId, status], (error, results) => {
+        const event_id = req.body.event_id
+        const status = req.body.status
+        
+        pool.query("INSERT INTO event_followers(user_id, event_id, status) VALUES ($1, $2, $3)", [req.params.user_id, event_id, status], (error, results) => {
             if (error) {
                 console.log(error)
                 res.status(200).send(error)
@@ -21,6 +23,10 @@ router.post("/create/:user_id", (req, res) => {
                 //res.status(201).send(`Sucessfully created comment from ${request.user_id} in event ${request.event_id}`)
                 res.status(201).send(`Sucessfully created comment`)
             }
+            /*
+            request = result.row[0]
+            res.status(201).send(`User has successfully added event ${request.event_id} to his list as status of ${results.status}`)
+            */
         })
     }  
 })

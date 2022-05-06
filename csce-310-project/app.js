@@ -14,7 +14,9 @@ var friendsRouter = require('./routes/friends');
 var adminRouter = require('./routes/admin');
 var membersRouter = require('./routes/members');
 var commentsRouter = require('./routes/comments');
-var eventsRouter = require('./routes/events');
+// var eventsRouter = require('./routes/events');
+var adminPagesRouter = require('./routes/adminPages');
+var adminEventsRouter = require('./routes/adminEvents');
 
 var app = express();
 
@@ -53,7 +55,9 @@ app.use('/friends', friendsRouter);
 app.use('/admin', adminRouter);
 app.use('/members', membersRouter);
 app.use('/comments', commentsRouter);
-app.use('/events', eventsRouter);
+// app.use('/events', eventsRouter);
+app.use('/adminEvents', adminEventsRouter);
+app.use('/pages', adminPagesRouter);
 
 // catch 404 and forward to error handler
 app.listen(port, function(error) {
