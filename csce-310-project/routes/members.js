@@ -35,6 +35,7 @@ router.post("/add", function(req, res, next) {
             res.status(400).send("Could not add page member")
             return
         }
+        pool.query("UPDATE pages SET member_count=member_count+1 WHERE page_id=$1", [page_id])
         res.json(poolres.rows[0])
     })
 })
@@ -47,6 +48,7 @@ router.delete("/delete", function(req, res, next) {
             res.status(400).send("Could not delete page member")
             return
         }
+        pool.query("UPDATE pages SET member_count=member_count-1 WHERE page_id=$1", [page_id])
         res.status(200).send("Page member deleted")
     })
 })
