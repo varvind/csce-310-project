@@ -23,11 +23,11 @@ router.post('/create', function(req, res, next) {
     [first_name, last_name, username, hash, profile_bio], (error, results) => {
       if (error) {
         console.log(error)
-        res.status(400).send("Error With Creating User, Please Check Users")
+        res.status(400).send("Error With Creating User, Duplicate Username or Missing Information")
         next(error)
-      }
-      console.log(results)
-      res.status(201).send(`${results.rows[0].user_id}`)
+      } else {
+        res.status(201).send(`${results.rows[0].user_id}`)
+      }      
     })
   });
 });
@@ -94,8 +94,9 @@ router.delete('/delete/:user_id', function(req, res, next) {
     if(error) {
       res.status(400).send("Error Deleting User")
       next(error)
+    } else {
+      res.status(200).send('User successfully deleted')
     }
-    res.status(200).send('User successfully deleted')
   })
 });
 
