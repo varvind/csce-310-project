@@ -8,14 +8,11 @@ const  YourPages = () => {
     const [state, setState] = useState({
         pages : []
     });
-    const [pagesState, setPagesState] = useState({});
-    const navigate = useNavigate();
 
     const style = {
         width:"18rem",
         marginTop: "1%",
     }
-    const adminId = Cookies.get('adminId')
 
     // get all pages
     const getPages = () => {
@@ -38,7 +35,6 @@ const  YourPages = () => {
 
     // delete page
     const handleDeletePage = async (e) => {
-        console.log("deleting page")
         e.preventDefault()
         const inputs = Object.values(e.target)
         .filter(c => typeof c.tagName === 'string' && c.tagName.toLowerCase() === 'input')

@@ -3,33 +3,33 @@
 var express = require('express');
 var router = express.Router();
 
-router.get("/get/by-userid/:userid", function(req, res, next) {
-    const user_id = req.params.userid
-    pool.query("SELECT * FROM page_members WHERE user_id=$1", [user_id], (poolerr, poolres) => {
-        if(poolerr) {
-            console.log(poolerr)
-            res.status(400).send("Member does not exist for that page")
-            return
+router.get("/getadmins/:search", (req, res, next) => {
+    const search = req.params.search
+    console.log(search)
+    pool.query("SELECT * FROM (admins INNER JOIN users ON admins.user_id=users.user_id) WHERE username LIKE '%' || $1 || '%'", [search], (perr, pres) => {
+        if(perr) {
+            console.log(perr)
+            res.status(400).send("Could not search admins")
         }
-        res.json(poolres.rows[0])
+        res.json(pres.rows)
     })
 })
 
-router.get("/get/by-pageid/:pageid", function(req, res, next) {
-    const page_id = req.params.pageid
-    pool.query("SELECT * FROM page_members WHERE page_id=$1", [page_id], (poolerr, poolres) => {
+router.get("/get/:page_id", function(req, res, next) {
+    const page_id = req.params.page_id
+    pool.query("SELECT * FROM ((SELECT * FROM admin_pages WHERE page_id=$1) AS ap INNER JOIN admins ON ap.admin_id=admins.admin_id) AS apa INNER JOIN users ON apa.user_id=users.user_id", [page_id], (poolerr, poolres) => {
         if(poolerr) {
             console.log(poolerr)
-            res.status(400).send("Member does not exist for that page")
+            res.status(400).send("Could not get page members")
             return
         }
-        res.json(poolres.rows[0])
+        res.json(poolres.rows)
     })
 })
 
 router.post("/add", function(req, res, next) {
-    const { page_id, user_id } = req.body
-    pool.query("INSERT INTO page_members (page_id, user_id) VALUES ($1, $2)", [page_id, user_id], (poolerr, poolres) => {
+    const { page_id, admin_id } = req.body
+    pool.query("INSERT INTO admin_pages (admin_id, page_id) VALUES ($1, $2) RETURNING *", [admin_id, page_id], (poolerr, poolres) => {
         if(poolerr) {
             console.log(poolerr)
             res.status(400).send("Could not add page member")
@@ -40,8 +40,8 @@ router.post("/add", function(req, res, next) {
 })
 
 router.delete("/delete", function(req, res, next) {
-    const { page_id, user_id } = req.body
-    pool.query("DELETE FROM page_members page_id=$1 AND user_id=$2", [page_id, user_id], (poolerr, poolres) => {
+    const { page_id, admin_id } = req.body
+    pool.query("DELETE FROM admin_pages WHERE page_id=$1 AND admin_id=$2", [page_id, admin_id], (poolerr, poolres) => {
         if(poolerr) {
             console.log(poolerr)
             res.status(400).send("Could not delete page member")
