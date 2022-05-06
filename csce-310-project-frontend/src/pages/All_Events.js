@@ -29,6 +29,7 @@ const All_Events = () => {
     // Function: Get all Events from the specified user
     const getAllEvents = () => {
         let user_id = Cookies.get('userId')
+        console.log(user_id)
         fetch(`http://localhost:4000/events/get/${user_id}`)
         .then((response) => response.json())
         .then((responseJson) => {
@@ -79,17 +80,17 @@ const All_Events = () => {
                             <>
                                 <center>
                                     <div class="card" style={style}>
-                                        <h5 class="card-body">
-                                            <h4 class="card-title"><u>{key.title}</u></h4>
+                                        <div class="card-body">
+                                            <h5 class="card-title"><u>{key.title}</u></h5>
                                             <h6 class="font-weight-normal">{key.description}</h6>
                                             <div style={buttonStyle}>
-                                                <a href={"/change/event/status/" + key.event_id} clas="card-link"><h6>Change Event Status</h6></a>
+                                                <a href={"/change/event/status/" + key.event_id} class="card-link"><h6>Change Event Status</h6></a>
                                                 <form onSubmit={handleDeleteEvent} style={deleteFormStyle}>
                                                     <input type="hidden" value={key.event_id} name="event_id"/>
                                                     <input type="submit" class="btn btn-primary" value="Delete Event"/>
                                                 </form>
                                             </div>
-                                        </h5>
+                                        </div>
                                     </div>
                                 </center>
                             </>

@@ -1,6 +1,5 @@
 // Joshua Kim
 var express = require('express');
-const { request } = require('../app');
 var router = express.Router();
 
 /*
@@ -71,16 +70,18 @@ router.get('/get/specific/name/:event_id', (req, res) => {
 /*
  *  Functionality: Get a specific event status
  */
-router.get('/get/specific/name/:event_id', (req, res) => {
-    pool.query('SELECT admin_events.title, event_followers.status INNER JOIN event_followers on admin_events.event_id = event_followers.event_id WHERE event_id = $1', [req.params.event_id], (error, results) => {
+router.get('/get/specific/status/:event_id', (req, res) => {
+    pool.query('SELECT status FROM event_followers WHERE event_id = $1', [req.params.event_id], (error, result) => {
         if (error) {
             console.log(error)
             res.status(200).send(error)
-        } else {
-            request = []
-            request = results.rows[0]
-            res.status(200).send(request)
         }
+
+        stat = {}
+        if (result.rows.length > 0) {
+            stat = result.rows[0]
+        }
+        res.status(200).send(stat)
     })
 })
 
@@ -88,14 +89,18 @@ router.get('/get/specific/name/:event_id', (req, res) => {
 /*
  *  Functionality: Update the status of the event ("Going" or "Maybe")
  */
-router.post("/update/:userId", (req, res) => {
-    const {eventId, status} = req.body
-    pool.query("UPDATE event_followers SET status = $1 WHERE user_id = $2 AND event_id = $3 RETURNING *", [status, req.params.userId, eventId], (error, results) => {
+router.post("/update/:user_id/:event_id", (req, res) => {
+    const user_id = req.params.user_id
+    const event_id = req.params.event_id;
+    const new_status = req.body.status
+    console.log("new status:", new_status, typeof(new_status))
+    pool.query("UPDATE event_followers SET status = $1 WHERE user_id = $2 AND event_id = $3 RETURNING *", [new_status, user_id, event_id], (error, results) => {
         if (error) {
-            throw error
+            console.log(error)
+            res.status(200).send(error)
         }
-        request = results.row
-        res.status(200).send(`Successfully updated status to ${request.status}`)
+        // request = results.rows
+        res.status(201).send(`Successfully updated status`)
     })
 })
 

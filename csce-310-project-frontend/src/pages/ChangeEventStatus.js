@@ -5,24 +5,20 @@ import Cookies from 'js-cookie';
 // Developed by Joshua Kim
 const changeEventStatus = () => {
     // store the various required states and intilize necessary variables
-    const [inputs, setInputs] = useState({});
-    const [eventName, setEventName] = useState("");
-    let event_id  = useParams();
+    let [eventName, setEventName] = useState("");
+    let [status, setStatus] = useState("")
+    let [new_status, setNewStatus] = useState("")
+    let { event_id } = useParams();
+    let user_id = Cookies.get('userId');
 
-    // This will handle any changes made on the form. This will allow the input values as the user types to be stored into the state
-    const handleChange = (event) => {
-        const name = event.target.name;
-        const value = event.target.value;
-        setInputs(values => ({...values, [name]: value}))
-    }
-
-    // Form Submit Handler: handles the event when the user presses the submit button
-    const handleSubmit = async (e) => {
-        console.log("Editing Event Status")
-        e.preventDefault()
-
-        // text retrieved from form
-        
+    const getEventStatus = () => {
+        fetch(`http://localhost:4000/events/get/specific/status/${event_id}`)
+        .then((response) => response.json())
+        .then((responseJson) => {
+            setStatus(responseJson.status)
+        }).catch((error) => {
+            console.error(error)
+        })
     }
 
     const getEventName = () => {
@@ -31,11 +27,42 @@ const changeEventStatus = () => {
         .then((response) => response.json())
         .then((responseJson) => {
             console.log(responseJson.title)
-            console.log(responseJson.eventName)
             setEventName(responseJson.title)
+            getEventStatus()
         }).catch((error) => {
             console.error(error)
         })
+    }
+
+    const handleChange = (event) => {
+        const value = event.target.value;
+        setNewStatus(value)
+    }
+
+    // Form Submit Handler: handles the event when the user presses the submit button
+    const handleSubmit = async (e) => {
+        console.log("Editing Event Status")
+        console.log("status:", new_status, typeof(new_status))
+        e.preventDefault()
+
+        // text retrieved from form
+        let response = await fetch(`http://localhost:4000/events/update/${user_id}/${event_id}`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                status: new_status
+            })
+        });
+
+        if (response.status === 201) {
+            alert("Successfully updated status")
+            setStatus(new_status)
+            window.location.href = '/allevents'
+        } else {
+            alert("Unable to update status")
+            window.location.href = `/change/event/status/${event_id}`
+        }
+        
     }
 
     // run getComment when page is loaded
@@ -48,16 +75,27 @@ const changeEventStatus = () => {
             <a href = '/allevents'> Back to My Events Page</a>
 
             <center>
-            {/* Display header and current event with identifier */}
-            <h1>Change Event {eventName} Status</h1>
-            <header style={{ borderBottom: "1px" }}>
-                <h4 style={{ display: "inline-block" }}>Event Status:</h4>
-                <span class="h4 font-weight-normal">{" "}</span>
-            </header>
+                {/* Display header and current event with identifier */}
+                <h1>Change Event Status: {eventName}</h1>
+                <header style={{ borderBottom: "1px" }}>
+                    <h4 style={{ display: "inline-block" }}>Event Status:</h4>
+                    <span class="h4 font-weight-normal">{" " + status}</span>
+                </header>
+
+                <form onSubmit={handleSubmit}>
+                    <label> New Event
+                    <select value={new_status} onChange={handleChange}>
+                        <option value=""></option>
+                        <option value="Going">Going</option>
+                        <option value="Maybe">Maybe</option>
+                    </select>
+                    </label>
+                    <br/>
+                    <input type="submit" class="btn btn-primary"/>
+                </form>
             </center>
         </>
     )
 }
 
 export default changeEventStatus
-

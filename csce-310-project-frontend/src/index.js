@@ -39,7 +39,7 @@ export default function App() {
           <Route path ='/allcomments' element = {<All_Comments/>} />
           <Route path ='/change/comment/:comment_id' element = {<ChangeComment/>} />
           <Route path='/allevents' element = {<All_Events/>}/>
-          <Route path ='/change/event/status/:comment_id' element = {<ChangeEventStatus/>} />
+          <Route path ='/change/event/status/:event_id' element = {<ChangeEventStatus/>} />
           <Route path='/profile/:user_id' element = {<UserProfile/>} />
           <Route path='/yourpages' element = {<YourPages />} />
           <Route path='/addpage' element = {<AddPage />} />
