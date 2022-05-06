@@ -6,7 +6,7 @@ import {useParams} from "react-router-dom";
 
 
 // made and edited by the best coder in the team: Jakob Evangelista
-
+// all member features made by the even better coder Jason Hirsch
 const EditPage = () => {
     const [inputs, setInputs] = useState({});
     const [members, setMembers] = useState([]);
