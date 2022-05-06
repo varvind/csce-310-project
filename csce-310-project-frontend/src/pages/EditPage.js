@@ -74,7 +74,7 @@ const EditPage = () => {
             headers: {'Content-Type':'application/json'},
             body: JSON.stringify({
                  "name": inputs.page_name,
-                 "description": inputs.description,
+                 "description": inputs.description
             })
          });
         if(response.status === 201) {

@@ -31,13 +31,33 @@ router.post("/create/:admin_id", (req, res, next) => {
 // update page
 router.post('/update/:page_id', (req, res) => {
     const {name, description} = req.body
-    pool.query("UPDATE pages SET description=$1, page_name=$2", [description, name], (error, result) => {
+    query1 = 'UPDATE pages SET '
+    if(name != null && name != "") {
+      query1 += `page_name = \'${name}\', `
+    }
+    if(description != null && description != "") {
+      query1 += `description = \'${description}\', `
+    }
+    query1 = query1.substring(0, query1.length - 2)
+    query1 += ` where page_id = ${req.params.page_id}`
+    console.log(query1)
+    pool.query(query1, (error, result) => {
       if(error) {
-        console.log(error)
+        next(error)
       }
       res.status(201).send(`Page successfully updated`)
     })
+  
 })
+// router.post('/update/:page_id', (req, res) => {
+//     const {name, description} = req.body
+//     pool.query("UPDATE pages SET description=$1, page_name=$2 where page_id=$3", [description, name, req.params.page_id], (error, result) => {
+//       if(error) {
+//         console.log(error)
+//       }
+//       res.status(201).send(`Page successfully updated`)
+//     })
+// })
 
 // deletes admin page
 router.delete('/delete/:page_id', function(req, res, next) {
