@@ -1,4 +1,5 @@
 // edited by the best coder in the team: Jakob Evangelista
+// Last get request: Joshua Kim
 const { query } = require('express');
 var express = require('express');
 var router = express.Router();
@@ -70,6 +71,10 @@ router.get('/get/:page_id', function(req, res, next){
   })
 })
 
+// developed by Joshua Kim
+/* 
+ *  Functionality: Get all events listed by admins
+ */
 router.get('/get/all/pages/events', function(req, res) {
   pool.query("SELECT * FROM admin_events", (error, result) => {
     if (error) {
